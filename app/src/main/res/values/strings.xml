@@ -1,0 +1,19 @@
+<resources>
+    <string name="app_name">Chancy Statement</string>
+    <string name="action_profile">Perfil</string>
+    <string name="action_ranking">Ranking</string>
+    <string name="action_help">Ayuda</string>
+    <string name="textView_highscore">Puntuación</string>
+    <string name="btn_play">Jugar</string>
+    <string name="profile_nickname_hint">Nickname</string>
+    <string name="profile_global_score">Estadísticas globales</string>
+    <string name="profile_global_ranking">Ranking global</string>
+    <string name="profile_difficulty">Dificultad</string>
+    <string name="profile_seekbar_easy_label">Facil</string>
+    <string name="profile_seekbar_medium_label">Media</string>
+    <string name="profile_seekbar_hard_label">Dificil</string>
+    <string name="profile_specific_score_label">Estadísticas específicas</string>
+    <string name="profile_activity_label">Perfil</string>
+    <string name="profile_puntuacion_label">Puntuación</string>
+    <string name="profile_ranking_label">Ranking</string>
+</resources>
