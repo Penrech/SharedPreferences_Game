@@ -3,9 +3,16 @@ package com.pauenrech.regalonavidadpauenrech
 import android.support.v7.app.AppCompatActivity
 import android.os.Bundle
 import android.content.Intent
+import android.opengl.Visibility
 import android.support.v4.widget.NestedScrollView
 import android.view.View
 import kotlinx.android.synthetic.main.activity_profile.*
+import android.widget.TextView
+import com.pauenrech.regalonavidadpauenrech.tools.NicknameValidator
+import android.view.WindowManager
+import android.os.Build
+
+
 
 
 class ProfileActivity : AppCompatActivity() {
@@ -34,30 +41,22 @@ class ProfileActivity : AppCompatActivity() {
         profile_toolbar.setNavigationOnClickListener { onBackPressed() }
 
 
-        /**
-         *
-         * Añado un listener al nestedScrollView de la activity para detectar cuando este scroll esta arriba del to-do
-         * Si el scroll está arriba del to_do, el toolbar no presenta sombra, si no es así, si la presenta.
-         * He añadido un If adicional en dentro del else para evitar que la propiedad se reasigne cada vez que se
-         * hace scroll
-         *
-         * */
-        profileScroll.setOnScrollChangeListener { nestedScrollView: NestedScrollView?, scrollX: Int, scrollY: Int, oldScrollX: Int, oldScrollY: Int ->
-
-            if (scrollY == 0) {
-                profileAppBar.elevation = 0f
-            }
-            else{
-                if (profileAppBar.elevation == 0f){
-                    profileAppBar.elevation = 5f
-                }
-            }
-
-        }
     }
 
     fun validarTextoNickname(){
-
+        profileNickName.addTextChangedListener(object : NicknameValidator(profileNickName) {
+            override fun validate(textView: TextView, text: String) {
+               if (text.length < 2){
+                   profileNicknameErrorLabel.visibility = View.VISIBLE
+                   profileNicknameErrorLabel.text = getString(R.string.profile_nickname_error_too_short)
+               }
+               else{
+                    if (profileNicknameErrorLabel.visibility == View.VISIBLE){
+                        profileNicknameErrorLabel.visibility = View.GONE
+                    }
+               }
+            }
+        })
     }
 
     /**

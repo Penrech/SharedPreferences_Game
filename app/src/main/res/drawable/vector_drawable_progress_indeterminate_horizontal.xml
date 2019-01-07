@@ -18,30 +18,30 @@
     <group
             android:name="progress_group"
             android:translateX="180"
-            android:translateY="5" >
+            android:translateY="5"
+            android:strokeLineCap="round">
+
         <path
                 android:name="background_track"
                 android:pathData="M -180.0,-1.0 l 360.0,0 l 0,2.0 l -360.0,0 Z"
-                android:strokeLineCap="round"
-                android:strokeWidth="2"
                 android:fillColor="?attr/colorControlActivated"/>
         <group
                 android:name="rect2_grp"
                 android:translateX="-197.60001"
-                android:scaleX="0.1" >
+                android:scaleX="0.1" android:layout_width="match_parent">
             <path
                     android:name="rect2"
                     android:pathData="M -144.0,-1.0 l 288.0,0 l 0,2.0 l -288.0,0 Z"
-                    android:fillColor="@android:color/background_light" />
+                    android:fillColor="@android:color/background_light"/>
         </group>
         <group
                 android:name="rect1_grp"
                 android:translateX="-522.59998"
-                android:scaleX="0.1" >
+                android:scaleX="0.1">
             <path
                     android:name="rect1"
                     android:pathData="M -144.0,-1.0 l 288.0,0 l 0,2.0 l -288.0,0 Z"
-                    android:fillColor="@android:color/background_light" />
+                    android:fillColor="@android:color/background_light"/>
         </group>
     </group>
 </vector>

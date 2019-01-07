@@ -16,4 +16,5 @@
     <string name="profile_activity_label">Perfil</string>
     <string name="profile_puntuacion_label">Puntuación</string>
     <string name="profile_ranking_label">Ranking</string>
+    <string name="profile_nickname_error_too_short">El nickname debe tener más de 1 caracter</string>
 </resources>
