@@ -3,6 +3,9 @@
     <color name="colorPrimary">#00897b</color>
     <color name="colorPrimaryDark">#00574b</color>
     <color name="colorAccent">#D81B60</color>
+    <color name="colorAccent2">#ffea00</color>
+    <color name="colorAccent3">#0288d1</color>
+    <color name="colorAccent4">#0277bd</color>
     <color name="colorLoadingBackground">#14a5d6a7</color>
     <color name="colorWhiteSemiTransparent">#c8ffffff</color>
     <color name="colorNoTick">#d50000</color>

@@ -17,8 +17,8 @@
             android:layout_height="match_parent">
 
         <ImageView
-                android:layout_width="250dp"
-                android:layout_height="250dp"
+                android:layout_width="200dp"
+                android:layout_height="200dp"
                 app:srcCompat="@drawable/ic_icono"
                 app:layout_constraintTop_toTopOf="parent"
                 app:layout_constraintStart_toStartOf="parent"
@@ -33,7 +33,7 @@
         <ProgressBar
                 style="@style/Widget.AppCompat.ProgressBar.Horizontal"
                 android:theme="@style/customProgressBar"
-                android:layout_width="150dp"
+                android:layout_width="100dp"
                 android:layout_height="30dp"
                 android:id="@+id/progressBar"
                 app:layout_constraintEnd_toEndOf="parent"

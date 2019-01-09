@@ -18,7 +18,7 @@
     </style>
     <style name="AppTheme.NoActionBar.InvisibleWhiteText">
         <item name="android:textColorPrimary">@android:color/white</item>
-        <item name="colorPrimary">@android:color/transparent</item>
+       <!-- <item name="colorPrimary">@android:color/transparent</item>-->
     </style>
     <style name="AppTheme.NoActionBar.LoadingHome">
         <item name="android:textColorPrimary">@android:color/white</item>
@@ -38,7 +38,7 @@
     </style>
     <style name="customSeekBar" parent="Widget.AppCompat.SeekBar.Discrete">
         <item name="tickMark">@null</item>
-        <item name="android:thumbTint">@android:color/background_light</item>
+        <item name="android:thumbTint">@color/colorAccent4</item>
         <item name="colorAccent">@android:color/background_light</item>
     </style>
     <style name="customEditText" parent="Widget.AppCompat.EditText">
@@ -46,6 +46,11 @@
         <item name="colorControlNormal">@color/colorWhiteSemiTransparent</item>
         <item name="colorControlActivated">@android:color/background_light</item>
         <item name="colorControlHighlight">@android:color/background_light</item>
+    </style>
+    <style name="customRatingBar" parent="Widget.AppCompat.RatingBar">
+        <item name="android:progressDrawable">@drawable/custom_ratingstars</item>
+        <item name="android:progressTint">@color/colorAccent2</item>
+        <item name="android:progressBackgroundTint">@color/colorCardBackground</item>
     </style>
 
 </resources>

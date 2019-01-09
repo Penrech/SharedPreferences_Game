@@ -2,31 +2,62 @@ package com.pauenrech.regalonavidadpauenrech
 
 import android.support.v7.app.AppCompatActivity
 import android.os.Bundle
-import android.content.Intent
-import android.opengl.Visibility
-import android.support.v4.widget.NestedScrollView
+import android.text.Editable
 import android.view.View
 import kotlinx.android.synthetic.main.activity_profile.*
 import android.widget.TextView
 import com.pauenrech.regalonavidadpauenrech.tools.NicknameValidator
-import android.view.WindowManager
-import android.os.Build
-
-
+import android.content.Context.INPUT_METHOD_SERVICE
+import android.support.v4.content.ContextCompat.getSystemService
+import android.view.inputmethod.InputMethodManager
 
 
 class ProfileActivity : AppCompatActivity() {
 
+    /**
+     *
+     * Declaro una variable input manager para gestionar más adelante cuando se muestra o oculta el teclado
+     *
+     * */
+    var imm : InputMethodManager? = null
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         setContentView(R.layout.activity_profile)
 
         /**
          *
-         * Aqui llamo a una función que a su vez llama a una función para validar el texto del editText nickname
+         * Inserto el valor de los datos del usuario en sus correspondientes lugares, extraigo los datos del homeActivity
+         * actividad que utilizo para gestionar la "base de datos local" con shared preferences
          *
          * */
-        validarTextoNickname()
+
+        profileNickName.text = HomeActivity.userData.user.nickname
+        profile_seekBar.progress = HomeActivity.userData.user.dificultad
+        profilePuntuacionGlobalText.text = "${HomeActivity.userData.user.puntuacion}"
+
+        /**
+         *
+         * Aquí compruebo si el valor de ranking es -1 antes de añadir el valor al textView. Esto es asi ya que el ranking
+         * se obtiene de la base de datos online, y por fallos de conexión en un primer momento puede no aparecer nada.
+         * No utilizo un nullable para hacer la implementación más sencilla
+         *
+         *
+         * */
+
+        if (HomeActivity.userData.user.ranking != -1){
+            profileRanking.text = "${HomeActivity.userData.user.ranking}"
+        }
+        else{
+            profileRanking.text = "-"
+        }
+
+        /**
+         *
+         * Aqui implemento la variable imm para gestionar cuando se muestra o no el teclado
+         *
+         * */
+
+        imm = getSystemService(INPUT_METHOD_SERVICE) as InputMethodManager
 
         /**
          *
@@ -40,23 +71,67 @@ class ProfileActivity : AppCompatActivity() {
 
         profile_toolbar.setNavigationOnClickListener { onBackPressed() }
 
+        /**
+         *
+         * Este onClick esta unido al botón que permite editar el nickname del usuario. Ya que es un solo botón que realiza
+         * dos acciones, compruebo con un if en que estado se está
+         *
+         * */
+        profileChangeNicknameBtn.setOnClickListener {
+            /**
+             *
+             * Si el textView no editable esta visible, se realiza lo siguiente:
+             * 1. Se añade el valor del textview al editText donde se editará el nickname
+             * 2. Se cambia el icono del propio botón para que ahora represente validación en lugar de edición
+             * 3. Se oculta el textview no editable y se muestra el editText
+             * 4. Se centra el focus en este edittext
+             * 5. Se abre el teclado del movil
+             *
+             * */
+            if (profileNickName.visibility == View.VISIBLE){
+                profileNickNameEdit.setText(profileNickName.text.toString())
+                profileChangeNicknameBtn.setImageResource(R.drawable.ic_round_done_24px_white)
+                profileNickName.visibility = View.GONE
+                profileNickNameEdit.visibility = View.VISIBLE
+                profileNickNameEdit.requestFocus()
+                imm?.toggleSoftInput(InputMethodManager.SHOW_FORCED, 0)
+
+            }
+            /**
+             *
+             * En este caso se llama a una función que implementa to_do el código para hacer el código más legible
+             *
+             * */
+            else{
+                validarTextoNickname()
+            }
+        }
+
 
     }
 
+    /**
+     *
+     * Esta función se encarga de validar si lo introducido en el editText sigue una serie de normas.
+     *
+     * */
     fun validarTextoNickname(){
-        profileNickName.addTextChangedListener(object : NicknameValidator(profileNickName) {
-            override fun validate(textView: TextView, text: String) {
-               if (text.length < 2){
+               if (profileNickNameEdit.text.length < 2){
                    profileNicknameErrorLabel.visibility = View.VISIBLE
                    profileNicknameErrorLabel.text = getString(R.string.profile_nickname_error_too_short)
                }
+               //todo validar con firebase
                else{
                     if (profileNicknameErrorLabel.visibility == View.VISIBLE){
                         profileNicknameErrorLabel.visibility = View.GONE
                     }
+                    HomeActivity.userData.changeNickname(profileNickNameEdit.text.toString())
+                    profileNickName.text = HomeActivity.userData.user.nickname
+                    profileChangeNicknameBtn.setImageResource(R.drawable.ic_round_edit_24px_white)
+                    profileNickName.visibility = View.VISIBLE
+                    profileNickNameEdit.visibility = View.GONE
+                    imm?.hideSoftInputFromWindow(profileNickNameEdit.windowToken, 0);
                }
-            }
-        })
     }
 
     /**
@@ -65,7 +140,16 @@ class ProfileActivity : AppCompatActivity() {
      *
      * */
     override fun finish() {
+        HomeActivity.userData.changeDificultad((profile_seekBar.progress))
+        imm?.hideSoftInputFromWindow(profileNickNameEdit.windowToken, 0);
         super.finish()
         overridePendingTransition(0,0)
     }
+
+    override fun onPause() {
+        HomeActivity.userData.changeDificultad((profile_seekBar.progress))
+        imm?.hideSoftInputFromWindow(profileNickNameEdit.windowToken, 0);
+        super.onPause()
+    }
+
 }

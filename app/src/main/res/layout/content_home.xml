@@ -52,7 +52,7 @@
                 android:layout_height="wrap_content"
                 app:layout_constraintStart_toStartOf="parent"
                 app:layout_constraintEnd_toEndOf="parent"
-                android:id="@+id/tV_highscore"
+                android:id="@+id/homeHighScore"
                 android:fontFamily="@font/comfortaa_bold"
                 android:textSize="30sp"
                 android:textColor="@android:color/background_light"
@@ -84,6 +84,7 @@
             android:paddingStart="32dp"
             android:background="@drawable/ripple" android:textColor="@android:color/background_light"
             android:stateListAnimator="@null" app:layout_constraintTop_toBottomOf="@+id/constraintLayout"
-            app:layout_constraintHorizontal_bias="0.5" android:layout_marginTop="32dp"/>
+            app:layout_constraintHorizontal_bias="0.5" android:layout_marginTop="32dp"
+            android:onClick="actualizarTemas"/>
 
 </android.support.constraint.ConstraintLayout>
