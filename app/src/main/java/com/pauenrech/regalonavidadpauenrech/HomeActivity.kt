@@ -48,7 +48,6 @@ class HomeActivity : AppCompatActivity(), UserData.SaveAndGetLocalUserData {
                 try {
                     Thread.sleep(2000)
                     userData.getLocalUserData()
-                    addTemas()
                 }catch (e: InterruptedException){
                     e.printStackTrace()
                 }
@@ -91,7 +90,7 @@ class HomeActivity : AppCompatActivity(), UserData.SaveAndGetLocalUserData {
         }
     }
 
-
+/*
     fun addTemas(){
         var temas: MutableList<Tema> = mutableListOf()
         temas.add(Tema("Geografía","geografia","#80CBC4","#00BFA5"))
@@ -103,9 +102,9 @@ class HomeActivity : AppCompatActivity(), UserData.SaveAndGetLocalUserData {
 
     fun actualizarTemas(view: View){
         var temas: MutableList<Tema> = mutableListOf()
-        temas.add(Tema("Geografío","geografia","#80CBC4","#00BFA5"))
+        temas.add(Tema("Geografía","geografia","#80CBC4","#00BFA5"))
         temas.add(Tema("Tecnología","tecnologia","#81D4FA","#0091EA"))
-        temas.add(Tema("Animalos","animales","#FFCC80","#FF6D00"))
+        temas.add(Tema("Animales","animales","#FFCC80","#FF6D00"))
         userData.ActualizarTemas(temas)
         retriveTemas()
     }
@@ -120,7 +119,7 @@ class HomeActivity : AppCompatActivity(), UserData.SaveAndGetLocalUserData {
         userData.user.temas.medio.forEach {
             Log.i("TAG","Temas dificiles: ${it.name}")
         }
-    }
+    }*/
 
     /**
      *

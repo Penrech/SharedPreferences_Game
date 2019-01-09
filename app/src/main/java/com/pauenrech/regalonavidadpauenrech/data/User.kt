@@ -8,12 +8,43 @@ class User(
     var temas: Temas = Temas())
 {
 
+
     class Temas(
         var facil: MutableList<ThemeScore> = mutableListOf(),
         var medio : MutableList<ThemeScore> = mutableListOf(),
         var dificil: MutableList<ThemeScore> = mutableListOf()){
 
         private var listaTemas: MutableMap<String,String> = HashMap()
+        enum class dificultadEnum(dificultad: Int){
+            FACIL(0),
+            MEDIO(1),
+            DIFICIL(2)
+        }
+
+        var megalista: List<MutableList<ThemeScore>> = mutableListOf(mutableListOf(), mutableListOf(),
+            mutableListOf())
+
+        fun addTemaLista(name: String, id: String){
+            val newTheme = ThemeScore(name,id,0)
+            if (!listaTemas.contains(id)) {
+                listaTemas.put(id,name)
+                megalista.forEach {
+                    it.add(newTheme)
+                }
+            }
+            else{
+                if(listaTemas[id] != name){
+                    listaTemas[id] = name
+                    megalista.forEach { mutableList ->
+                        mutableList.forEach {
+                            if (it.id == id){
+                                it.name = name
+                            }
+                        }
+                    }
+                }
+            }
+        }
 
 
         fun addTema(name: String, id: String){
