@@ -2,17 +2,25 @@ package com.pauenrech.regalonavidadpauenrech
 
 import android.support.v7.app.AppCompatActivity
 import android.os.Bundle
-import android.text.Editable
+import android.support.v7.widget.LinearLayoutManager
+import android.support.v7.widget.RecyclerView
+import android.util.Log
 import android.view.View
 import kotlinx.android.synthetic.main.activity_profile.*
-import android.widget.TextView
-import com.pauenrech.regalonavidadpauenrech.tools.NicknameValidator
-import android.content.Context.INPUT_METHOD_SERVICE
-import android.support.v4.content.ContextCompat.getSystemService
 import android.view.inputmethod.InputMethodManager
+import android.widget.SeekBar
+import com.pauenrech.regalonavidadpauenrech.adapters.profileSpecificListAdapter
+import com.pauenrech.regalonavidadpauenrech.data.User
+import com.pauenrech.regalonavidadpauenrech.layoutManagers.NoScrollLinearLayoutManager
 
 
 class ProfileActivity : AppCompatActivity() {
+
+
+    private var layoutManager: NoScrollLinearLayoutManager? = null
+    private var adapter: RecyclerView.Adapter<profileSpecificListAdapter.SpecificListViewHolder>? = null
+    var initialSpecificData : List<MutableList<User.ThemeScore>>? = null
+    var initialDificultad : Int? = null
 
     /**
      *
@@ -34,6 +42,11 @@ class ProfileActivity : AppCompatActivity() {
         profileNickName.text = HomeActivity.userData.user.nickname
         profile_seekBar.progress = HomeActivity.userData.user.dificultad
         profilePuntuacionGlobalText.text = "${HomeActivity.userData.user.puntuacion}"
+        initialSpecificData = HomeActivity.userData.user.temas
+        initialDificultad = HomeActivity.userData.user.dificultad
+
+        setSpecificRecyclerView()
+        setSeekBarListener()
 
         /**
          *
@@ -110,6 +123,37 @@ class ProfileActivity : AppCompatActivity() {
 
     }
 
+    fun setSpecificRecyclerView(){
+
+        if (initialSpecificData!![0].size > 1){
+            layoutManager = NoScrollLinearLayoutManager(this)
+            adapter = profileSpecificListAdapter(initialSpecificData!![initialDificultad!!])
+
+            profileSpecificsRV.adapter = adapter
+            profileSpecificsRV.layoutManager = layoutManager
+        }
+        else{
+            profileSpecificScoreLabel.visibility = View.GONE
+            profileSpecificCardView.visibility = View.GONE
+        }
+    }
+
+    fun setSeekBarListener(){
+        profile_seekBar.setOnSeekBarChangeListener(object : SeekBar.OnSeekBarChangeListener {
+
+            override fun onProgressChanged(seekBar: SeekBar, i: Int, b: Boolean) {
+                if (profileSpecificCardView.visibility == View.VISIBLE){
+                    val recyclerAdapter = profileSpecificsRV.adapter!! as profileSpecificListAdapter
+                    recyclerAdapter.changeData(initialSpecificData!![i])
+                }
+            }
+
+            override fun onStartTrackingTouch(seekBar: SeekBar) {}
+
+            override fun onStopTrackingTouch(seekBar: SeekBar) {}
+        })
+    }
+
     /**
      *
      * Esta función se encarga de validar si lo introducido en el editText sigue una serie de normas.
@@ -143,7 +187,7 @@ class ProfileActivity : AppCompatActivity() {
         HomeActivity.userData.changeDificultad((profile_seekBar.progress))
         imm?.hideSoftInputFromWindow(profileNickNameEdit.windowToken, 0);
         super.finish()
-        overridePendingTransition(0,0)
+        overridePendingTransition(R.anim.slide_from_left,R.anim.slide_to_right)
     }
 
     override fun onPause() {

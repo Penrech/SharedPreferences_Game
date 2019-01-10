@@ -1,7 +1,5 @@
 package com.pauenrech.regalonavidadpauenrech.data
 
-import com.pauenrech.regalonavidadpauenrech.HomeActivity
-
 
 class UserData(var user: User = User(),
                var savingInterface: SaveAndGetLocalUserData? = null)
@@ -12,13 +10,6 @@ class UserData(var user: User = User(),
         fun getUserData()
     }
 
-    private var listaTemas: MutableList<String> = mutableListOf()
-
-    init {
-        user.temas.facil.forEach {
-            listaTemas.add(it.id)
-        }
-    }
 
     fun getLocalUserData(){
         savingInterface?.getUserData()
@@ -39,16 +30,22 @@ class UserData(var user: User = User(),
         savingInterface?.saveUserData(this.user)
     }
 
+    fun changeThemeScore(newScore: Int, dificultad: Int, temaId: String){
+        val ref = user.temas[dificultad].filter { it.id == temaId }
+        ref[0].score = newScore
+        savingInterface?.saveUserData(this.user)
+    }
+
     fun changeRanking(ranking: Int){
         this.user.ranking = ranking
         savingInterface?.saveUserData(this.user)
     }
 
-    fun ActualizarTemas(_temas: MutableList<Tema>){
-        var listaTemasAEliminar: MutableList<String> = mutableListOf()
-            _temas.forEach {
-                user.temas.addTema(it.name, it.id)
-            }
+    fun ActualizarTemas(_temas: TemasList){
+         user.deleteTema(_temas)
+        _temas.temas.forEach {
+            user.addTemaLista(it.name,it.id)
+        }
         savingInterface?.saveUserData(this.user)
     }
 

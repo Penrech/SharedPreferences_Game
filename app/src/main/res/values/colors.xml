@@ -6,6 +6,7 @@
     <color name="colorAccent2">#ffea00</color>
     <color name="colorAccent3">#0288d1</color>
     <color name="colorAccent4">#0277bd</color>
+    <color name="colorBotonRegister">#00e676</color>
     <color name="colorLoadingBackground">#14a5d6a7</color>
     <color name="colorWhiteSemiTransparent">#c8ffffff</color>
     <color name="colorNoTick">#d50000</color>

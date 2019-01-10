@@ -1,70 +1,67 @@
 package com.pauenrech.regalonavidadpauenrech.data
 
 class User(
+    var uid: String? = null,
     var nickname: String = "Username",
     var dificultad: Int = 0,
     var puntuacion: Int = 0,
     var ranking: Int = -1,
-    var temas: Temas = Temas())
+    var temas: List<MutableList<ThemeScore>> = listOf(mutableListOf(), mutableListOf(),
+        mutableListOf()) )
 {
 
+    private var listaTemas: MutableMap<String,String> = HashMap()
+    var numeroDeTemas : Int = 0
 
-    class Temas(
-        var facil: MutableList<ThemeScore> = mutableListOf(),
-        var medio : MutableList<ThemeScore> = mutableListOf(),
-        var dificil: MutableList<ThemeScore> = mutableListOf()){
-
-        private var listaTemas: MutableMap<String,String> = HashMap()
-        enum class dificultadEnum(dificultad: Int){
-            FACIL(0),
-            MEDIO(1),
-            DIFICIL(2)
+    init {
+        temas[DificultadEnum.FACIL.value].forEach {
+            listaTemas.put(it.id,it.name)
         }
+        numeroDeTemas = listaTemas.size
 
-        var megalista: List<MutableList<ThemeScore>> = mutableListOf(mutableListOf(), mutableListOf(),
-            mutableListOf())
+    }
 
-        fun addTemaLista(name: String, id: String){
-            val newTheme = ThemeScore(name,id,0)
-            if (!listaTemas.contains(id)) {
-                listaTemas.put(id,name)
-                megalista.forEach {
-                    it.add(newTheme)
+    enum class DificultadEnum (val value: Int) {
+        FACIL(0),
+        MEDIO(1),
+        DIFICIL(2)
+    }
+
+    fun deleteTema(_webTemas: TemasList){
+        var willBeDeleted = mutableListOf<String>()
+        listaTemas.forEach { temalocal ->
+            var filter = _webTemas.temas.filter { it.id == temalocal.key }
+            if (filter.size == 0)
+                willBeDeleted.add(temalocal.key)
+        }
+        temas.forEach {dificultad ->
+            dificultad.forEachIndexed { index, themeScore ->
+                if (willBeDeleted.contains(themeScore.id)){
+                    dificultad.removeAt(index)
                 }
+
             }
-            else{
-                if(listaTemas[id] != name){
-                    listaTemas[id] = name
-                    megalista.forEach { mutableList ->
-                        mutableList.forEach {
-                            if (it.id == id){
-                                it.name = name
-                            }
+        }
+    }
+
+    fun addTemaLista(name: String, id: String){
+
+        if (!listaTemas.contains(id)) {
+            listaTemas.put(id,name)
+            temas.forEachIndexed { index, it ->
+                it.add(ThemeScore(name, id, index,0))
+            }
+            numeroDeTemas = listaTemas.size
+        }
+        else{
+            if(listaTemas[id] != name){
+                listaTemas[id] = name
+                temas.forEach { mutableList ->
+                    mutableList.forEach {
+                        if (it.id == id){
+                            it.name = name
                         }
                     }
-                }
-            }
-        }
-
-
-        fun addTema(name: String, id: String){
-            val newTheme = ThemeScore(name,id,0)
-            if (!listaTemas.contains(id)) {
-                listaTemas.put(id,name)
-                facil.add(newTheme)
-                medio.add(newTheme)
-                dificil.add(newTheme)
-            }
-            else{
-                if(listaTemas[id] != name){
-                    listaTemas[id] = name
-                        val listOfElementsToChange: MutableList<List<ThemeScore>> = mutableListOf()
-                        listOfElementsToChange.add(facil.filter { it.id == id })
-                        listOfElementsToChange.add(medio.filter { it.id == id })
-                        listOfElementsToChange.add(dificil.filter { it.id == id })
-                        listOfElementsToChange.forEach {
-                            it[0].name = name
-                        }
                 }
             }
         }
@@ -72,6 +69,7 @@ class User(
 
     class ThemeScore(var name: String,
                      var id: String,
+                     var dificultadid: Int,
                      var score: Int)
 
 }

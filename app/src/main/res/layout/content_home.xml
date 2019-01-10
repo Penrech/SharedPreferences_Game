@@ -84,7 +84,6 @@
             android:paddingStart="32dp"
             android:background="@drawable/ripple" android:textColor="@android:color/background_light"
             android:stateListAnimator="@null" app:layout_constraintTop_toBottomOf="@+id/constraintLayout"
-            app:layout_constraintHorizontal_bias="0.5" android:layout_marginTop="32dp"
-            android:onClick="actualizarTemas"/>
+            app:layout_constraintHorizontal_bias="0.5" android:layout_marginTop="32dp"/>
 
 </android.support.constraint.ConstraintLayout>

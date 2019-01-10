@@ -22,10 +22,14 @@
         <meta-data
                 android:name="preloaded_fonts"
                 android:resource="@array/preloaded_fonts"/>
+
         <activity
                 android:name=".ProfileActivity"
                 android:label="@string/profile_activity_label"
                 android:theme="@style/AppTheme.NoActionBar.InvisibleWhiteText">
+        </activity>
+        <activity android:name=".RegisterActivity"
+                  android:theme="@style/AppTheme.NoActionBar.InvisibleWhiteText">
         </activity>
     </application>
 
