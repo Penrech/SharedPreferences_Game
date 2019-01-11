@@ -1,4 +1,4 @@
-package com.pauenrech.regalonavidadpauenrech.data
+package com.pauenrech.regalonavidadpauenrech.model
 
 class User(
     var uid: String? = null,
@@ -29,18 +29,24 @@ class User(
 
     fun deleteTema(_webTemas: TemasList){
         var willBeDeleted = mutableListOf<String>()
+
         listaTemas.forEach { temalocal ->
             var filter = _webTemas.temas.filter { it.id == temalocal.key }
             if (filter.size == 0)
                 willBeDeleted.add(temalocal.key)
         }
         temas.forEach {dificultad ->
+            var indexToDelete = mutableListOf<ThemeScore>()
             dificultad.forEachIndexed { index, themeScore ->
                 if (willBeDeleted.contains(themeScore.id)){
-                    dificultad.removeAt(index)
+                   indexToDelete.add(themeScore)
                 }
-
             }
+            dificultad.removeAll(indexToDelete)
+            indexToDelete.forEach {
+                listaTemas.remove(it.id)
+            }
+            numeroDeTemas = listaTemas.size
         }
     }
 

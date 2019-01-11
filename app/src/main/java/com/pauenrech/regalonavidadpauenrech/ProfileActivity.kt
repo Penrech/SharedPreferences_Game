@@ -2,15 +2,15 @@ package com.pauenrech.regalonavidadpauenrech
 
 import android.support.v7.app.AppCompatActivity
 import android.os.Bundle
-import android.support.v7.widget.LinearLayoutManager
 import android.support.v7.widget.RecyclerView
-import android.util.Log
 import android.view.View
 import kotlinx.android.synthetic.main.activity_profile.*
 import android.view.inputmethod.InputMethodManager
 import android.widget.SeekBar
+import com.google.firebase.database.DatabaseReference
+import com.google.firebase.database.FirebaseDatabase
 import com.pauenrech.regalonavidadpauenrech.adapters.profileSpecificListAdapter
-import com.pauenrech.regalonavidadpauenrech.data.User
+import com.pauenrech.regalonavidadpauenrech.model.User
 import com.pauenrech.regalonavidadpauenrech.layoutManagers.NoScrollLinearLayoutManager
 
 
@@ -21,6 +21,9 @@ class ProfileActivity : AppCompatActivity() {
     private var adapter: RecyclerView.Adapter<profileSpecificListAdapter.SpecificListViewHolder>? = null
     var initialSpecificData : List<MutableList<User.ThemeScore>>? = null
     var initialDificultad : Int? = null
+    val userDataReference = HomeActivity.userData
+    var database : FirebaseDatabase? = null
+    var usersRef: DatabaseReference? = null
 
     /**
      *
@@ -31,7 +34,8 @@ class ProfileActivity : AppCompatActivity() {
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         setContentView(R.layout.activity_profile)
-
+        database = FirebaseDatabase.getInstance()
+        usersRef = database?.getReference("usuarios")
         /**
          *
          * Inserto el valor de los datos del usuario en sus correspondientes lugares, extraigo los datos del homeActivity
@@ -39,11 +43,11 @@ class ProfileActivity : AppCompatActivity() {
          *
          * */
 
-        profileNickName.text = HomeActivity.userData.user.nickname
-        profile_seekBar.progress = HomeActivity.userData.user.dificultad
-        profilePuntuacionGlobalText.text = "${HomeActivity.userData.user.puntuacion}"
-        initialSpecificData = HomeActivity.userData.user.temas
-        initialDificultad = HomeActivity.userData.user.dificultad
+        profileNickName.text = userDataReference.user.nickname
+        profile_seekBar.progress = userDataReference.user.dificultad
+        profilePuntuacionGlobalText.text = "${userDataReference.user.puntuacion}"
+        initialSpecificData = userDataReference.user.temas
+        initialDificultad = userDataReference.user.dificultad
 
         setSpecificRecyclerView()
         setSeekBarListener()
@@ -57,8 +61,8 @@ class ProfileActivity : AppCompatActivity() {
          *
          * */
 
-        if (HomeActivity.userData.user.ranking != -1){
-            profileRanking.text = "${HomeActivity.userData.user.ranking}"
+        if (userDataReference.user.ranking != -1){
+            profileRanking.text = "${userDataReference.user.ranking}"
         }
         else{
             profileRanking.text = "-"
@@ -131,6 +135,7 @@ class ProfileActivity : AppCompatActivity() {
 
             profileSpecificsRV.adapter = adapter
             profileSpecificsRV.layoutManager = layoutManager
+
         }
         else{
             profileSpecificScoreLabel.visibility = View.GONE
@@ -169,8 +174,8 @@ class ProfileActivity : AppCompatActivity() {
                     if (profileNicknameErrorLabel.visibility == View.VISIBLE){
                         profileNicknameErrorLabel.visibility = View.GONE
                     }
-                    HomeActivity.userData.changeNickname(profileNickNameEdit.text.toString())
-                    profileNickName.text = HomeActivity.userData.user.nickname
+                   userDataReference.changeNickname(profileNickNameEdit.text.toString())
+                    profileNickName.text = userDataReference.user.nickname
                     profileChangeNicknameBtn.setImageResource(R.drawable.ic_round_edit_24px_white)
                     profileNickName.visibility = View.VISIBLE
                     profileNickNameEdit.visibility = View.GONE
@@ -184,14 +189,15 @@ class ProfileActivity : AppCompatActivity() {
      *
      * */
     override fun finish() {
-        HomeActivity.userData.changeDificultad((profile_seekBar.progress))
+        userDataReference.changeDificultad((profile_seekBar.progress))
         imm?.hideSoftInputFromWindow(profileNickNameEdit.windowToken, 0);
         super.finish()
+        //overridePendingTransition(0,0)
         overridePendingTransition(R.anim.slide_from_left,R.anim.slide_to_right)
     }
 
     override fun onPause() {
-        HomeActivity.userData.changeDificultad((profile_seekBar.progress))
+        userDataReference.changeDificultad((profile_seekBar.progress))
         imm?.hideSoftInputFromWindow(profileNickNameEdit.windowToken, 0);
         super.onPause()
     }

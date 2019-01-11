@@ -28,8 +28,18 @@
                 android:label="@string/profile_activity_label"
                 android:theme="@style/AppTheme.NoActionBar.InvisibleWhiteText">
         </activity>
-        <activity android:name=".RegisterActivity"
-                  android:theme="@style/AppTheme.NoActionBar.InvisibleWhiteText">
+        <activity
+                android:name=".RegisterActivity"
+                android:theme="@style/AppTheme.NoActionBar.InvisibleWhiteText">
+        </activity>
+        <activity
+                android:name=".SelectionActivity"
+                android:exported="true"
+                android:theme="@style/AppTheme.NoActionBar.InvisibleWhiteText">
+        </activity>
+        <activity
+                android:name=".GameActivity"
+                android:theme="@style/AppTheme.NoActionBar.InvisibleWhiteText">
         </activity>
     </application>
 

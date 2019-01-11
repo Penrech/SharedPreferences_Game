@@ -1,0 +1,102 @@
+<?xml version="1.0" encoding="utf-8"?>
+<FrameLayout xmlns:android="http://schemas.android.com/apk/res/android"
+             xmlns:app="http://schemas.android.com/apk/res-auto"
+             xmlns:tools="http://schemas.android.com/tools"
+             android:layout_width="match_parent"
+             android:layout_height="wrap_content"
+             tools:context=".fragments.GameControllerFragment"
+             android:background="@android:color/transparent"
+             app:layout_behavior="@string/appbar_scrolling_view_behavior">
+
+    <android.support.constraint.ConstraintLayout
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content">
+
+        <android.support.v7.widget.CardView
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                app:layout_constraintStart_toStartOf="parent"
+                app:layout_constraintEnd_toEndOf="parent"
+                app:cardCornerRadius="30dp"
+                android:layout_marginTop="16dp"
+                app:cardElevation="0dp"
+                android:id="@+id/selectionCardView"
+                app:cardBackgroundColor="@color/colorCardBackground"
+                android:layout_marginStart="16dp"
+                android:layout_marginEnd="16dp"
+                android:layout_marginBottom="16dp"
+                app:layout_constraintBottom_toBottomOf="parent"
+                app:layout_constraintTop_toTopOf="parent">
+
+            <android.support.constraint.ConstraintLayout
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content">
+
+                <TextView
+                        android:text="00:15"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:id="@+id/gameControllerTimer"
+                        android:fontFamily="@font/comfortaa_bold"
+                        android:textSize="24sp"
+                        android:textColor="@android:color/background_light"
+                        android:textAlignment="center"
+                        android:layout_marginStart="24dp"
+                        app:layout_constraintStart_toStartOf="parent"
+                        app:layout_constraintHorizontal_chainStyle="spread_inside"
+                        app:layout_constraintTop_toBottomOf="@+id/gameControllerRatingBar"
+                        android:layout_marginTop="24dp"
+                        app:layout_constraintBottom_toBottomOf="parent"
+                        android:layout_marginBottom="32dp"
+                        android:layout_marginEnd="24dp"
+                        app:layout_constraintEnd_toStartOf="@+id/gameControllerCorrection"
+                        android:visibility="visible"/>
+
+                <RatingBar
+                        android:layout_width="wrap_content"
+                        android:id="@+id/gameControllerRatingBar"
+                        android:layout_height="24dp"
+                        android:focusable="false"
+                        android:rating="2.5"
+                        android:stepSize="0.5"
+                        style="@style/customRatingBar"
+                        android:theme="@style/customRatingBar"
+                        android:isIndicator="true"
+                        app:layout_constraintStart_toStartOf="parent"
+                        android:layout_marginTop="32dp"
+                        android:layout_marginStart="24dp"
+                        app:layout_constraintHorizontal_bias="0.5"
+                        app:layout_constraintEnd_toStartOf="@+id/gameControllerPreguntas"
+                        app:layout_constraintTop_toTopOf="parent"/>
+                <TextView
+                        android:text="0/10"
+                        android:layout_width="0dp"
+                        android:layout_height="wrap_content"
+                        android:id="@+id/gameControllerPreguntas"
+                        app:layout_constraintEnd_toEndOf="parent"
+                        android:layout_marginEnd="24dp"
+                        android:textSize="20sp"
+                        android:textColor="@android:color/background_light"
+                        android:textAlignment="textEnd"
+                        app:layout_constraintTop_toTopOf="@+id/gameControllerRatingBar"
+                        app:layout_constraintBottom_toBottomOf="@+id/gameControllerRatingBar"
+                        app:layout_constraintStart_toEndOf="@+id/gameControllerRatingBar"
+                        android:layout_marginStart="8dp"
+                        app:layout_constraintHorizontal_bias="0.5"/>
+                <TextView
+                        android:text="Correcto"
+                        android:layout_width="0dp"
+                        android:layout_height="wrap_content"
+                        android:id="@+id/gameControllerCorrection"
+                        app:layout_constraintEnd_toEndOf="parent"
+                        android:layout_marginEnd="24dp"
+                        app:layout_constraintTop_toTopOf="@+id/gameControllerTimer"
+                        app:layout_constraintBottom_toBottomOf="@+id/gameControllerTimer"
+                        android:textSize="24sp"
+                        android:textColor="@android:color/background_light"
+                        android:visibility="gone" android:textAlignment="textEnd"/>
+            </android.support.constraint.ConstraintLayout>
+
+        </android.support.v7.widget.CardView>
+    </android.support.constraint.ConstraintLayout>
+</FrameLayout>

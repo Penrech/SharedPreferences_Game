@@ -1,6 +1,6 @@
-package com.pauenrech.regalonavidadpauenrech.data
+package com.pauenrech.regalonavidadpauenrech.model
 
-class PreguntasData(var listaPreguntasTotal: PreguntasTotal,
+class PreguntasData(var listaPreguntasTotal: PreguntasTotal = PreguntasTotal(),
                     var savingInterface: SaveAndGetListaPreguntas? = null)
 
 {

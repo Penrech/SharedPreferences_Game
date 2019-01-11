@@ -1,4 +1,5 @@
-package com.pauenrech.regalonavidadpauenrech.data
+package com.pauenrech.regalonavidadpauenrech.model
+
 
 
 class UserData(var user: User = User(),
@@ -13,6 +14,11 @@ class UserData(var user: User = User(),
 
     fun getLocalUserData(){
         savingInterface?.getUserData()
+    }
+
+    fun setUid(uid: String){
+        this.user.uid = uid
+        savingInterface?.saveUserData(this.user)
     }
 
     fun changeNickname(nickname: String){

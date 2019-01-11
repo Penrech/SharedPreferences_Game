@@ -8,7 +8,9 @@
             android:layout_width="match_parent"
             android:layout_height="wrap_content" app:layout_constraintTop_toTopOf="parent"
             app:layout_constraintStart_toStartOf="parent" app:layout_constraintBottom_toBottomOf="parent"
-            app:layout_constraintEnd_toEndOf="parent" app:cardCornerRadius="30dp" app:cardElevation="0dp">
+            app:layout_constraintEnd_toEndOf="parent" app:cardCornerRadius="30dp" app:cardElevation="10dp"
+            android:layout_marginBottom="16dp" android:layout_marginStart="16dp" android:layout_marginEnd="16dp"
+            android:layout_marginTop="16dp">
         <android.support.constraint.ConstraintLayout
                 android:layout_width="match_parent"
                 android:layout_height="match_parent">
@@ -41,7 +43,7 @@
                     android:layout_marginBottom="24dp" app:layout_constraintBottom_toBottomOf="parent"
                     android:layout_marginTop="24dp" style="@style/Widget.AppCompat.Button.Borderless"
                     android:visibility="visible" app:layout_constraintStart_toEndOf="@+id/customDialogSecundaryButton"
-                    app:layout_constraintHorizontal_bias="0.5" android:textSize="16sp"
+                    app:layout_constraintHorizontal_bias="0.5" android:textSize="14sp"
                     android:fontFamily="@font/comfortaa_bold" android:textColor="@color/colorPrimaryDark"/>
             <Button
                     android:text="Button"
@@ -54,7 +56,7 @@
                     style="@style/Widget.AppCompat.Button.Borderless" app:layout_constraintStart_toStartOf="parent"
                     app:layout_constraintHorizontal_bias="1.0"
                     app:layout_constraintHorizontal_chainStyle="packed" android:visibility="visible"
-                    android:textSize="16sp" android:fontFamily="@font/comfortaa_bold"
+                    android:textSize="14sp" android:fontFamily="@font/comfortaa_bold"
                     android:textColor="@color/colorPrimaryDark"/>
         </android.support.constraint.ConstraintLayout>
     </android.support.v7.widget.CardView>

@@ -1,4 +1,4 @@
-package com.pauenrech.regalonavidadpauenrech.data
+package com.pauenrech.regalonavidadpauenrech.model
 
 class TemaData(var lista: TemasList = TemasList() ,
                var savingInterface: SaveOrGetListaTemas? = null

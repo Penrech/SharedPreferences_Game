@@ -1,4 +1,4 @@
-package com.pauenrech.regalonavidadpauenrech.data
+package com.pauenrech.regalonavidadpauenrech.model
 
 class Tema(var name: String = "",
            var id: String = "",

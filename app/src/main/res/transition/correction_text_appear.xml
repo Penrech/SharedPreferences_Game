@@ -1,0 +1,16 @@
+<?xml version="1.0" encoding="utf-8"?>
+<transitionSet xmlns:android="http://schemas.android.com/apk/res/android">
+
+
+    <fade
+            android:duration="@android:integer/config_shortAnimTime"
+            android:interpolator="@android:interpolator/linear_out_slow_in">
+    </fade>
+
+    <changeBounds
+            android:duration="@android:integer/config_shortAnimTime"
+            android:interpolator="@android:interpolator/linear_out_slow_in">>
+
+    </changeBounds>
+
+</transitionSet>

@@ -1,11 +1,13 @@
 package com.pauenrech.regalonavidadpauenrech
 
 
+import android.app.Activity
 import android.content.Intent
 import android.content.SharedPreferences
 import android.os.Bundle
 import android.os.Handler
 import android.preference.PreferenceManager
+import android.support.design.widget.Snackbar
 import android.support.transition.Scene
 import android.support.transition.Transition
 import android.support.transition.TransitionInflater
@@ -16,25 +18,24 @@ import android.util.Log
 import android.view.Menu
 import android.view.MenuItem
 import android.view.View
+import android.widget.TextView
 import android.widget.Toast
 
 import kotlinx.android.synthetic.main.activity_home.*
 import com.google.gson.Gson
-import com.pauenrech.regalonavidadpauenrech.data.*
+import com.pauenrech.regalonavidadpauenrech.model.*
 import kotlinx.android.synthetic.main.content_home.*
 import com.google.firebase.database.DatabaseReference
 import com.google.firebase.database.FirebaseDatabase
 import com.google.firebase.database.DatabaseError
 import com.google.firebase.database.DataSnapshot
 import com.google.firebase.database.ValueEventListener
-import com.google.android.gms.tasks.OnSuccessListener
-import com.google.android.gms.tasks.Task
-import com.google.firebase.FirebaseApp
 
 
 class HomeActivity : AppCompatActivity(),
     UserData.SaveAndGetLocalUserData,
-    TemaData.SaveOrGetListaTemas{
+    TemaData.SaveOrGetListaTemas,
+    PreguntasData.SaveAndGetListaPreguntas{
 
 
 
@@ -55,16 +56,30 @@ class HomeActivity : AppCompatActivity(),
         super.onCreate(savedInstanceState)
         setContentView(R.layout.activity_home)
 
+        sharedPreferences = PreferenceManager.getDefaultSharedPreferences(this)
+        gson = Gson()
+        userData.savingInterface = this as UserData.SaveAndGetLocalUserData
+        temasData.savingInterface = this as TemaData.SaveOrGetListaTemas
+        preguntasData.savingInterface = this as PreguntasData.SaveAndGetListaPreguntas
+
+        rootHome.background = getDrawable(android.R.color.background_light)
+
+        homeScene = Scene.getSceneForLayout(rootHome,R.layout.activity_home,this)
+        loadingScene = Scene.getSceneForLayout(rootHome,R.layout.loading_home,this)
+
+        loadingScene?.enter()
+
         database = FirebaseDatabase.getInstance()
 
         conectionRef = database?.getReference(".info/connected")
-        preguntasRef = database?.getReference("preguntas")!!.child("Es_es")
+        preguntasRef = database?.getReference("preguntas")!!.child("ES_es")
         temasRef = database?.getReference("temas")!!.child("ES_es")
         usuariosRef = database?.getReference("usuarios")
         dummyRef = database?.getReference("conection")
 
         userData.getLocalUserData()
         temasData.getLocalListaTemas()
+        preguntasData.getLocalPreguntasData()
 
         conectionRef!!.addValueEventListener(object : ValueEventListener {
             override fun onDataChange(snapshot: DataSnapshot) {
@@ -84,28 +99,9 @@ class HomeActivity : AppCompatActivity(),
             }
         })
         getTemasFromFirebase()
-
-        rootHome.background = getDrawable(android.R.color.background_light)
-        sharedPreferences = PreferenceManager.getDefaultSharedPreferences(this)
-        gson = Gson()
-        userData.savingInterface = this as UserData.SaveAndGetLocalUserData
-        temasData.savingInterface = this as TemaData.SaveOrGetListaTemas
-
-
-        homeScene = Scene.getSceneForLayout(rootHome,R.layout.activity_home,this)
-        loadingScene = Scene.getSceneForLayout(rootHome,R.layout.loading_home,this)
-
-        loadingScene?.enter()
-
-
-
+        getPreguntasFromFirebase()
+        saveUsuarioToFirebase(userData.user)
         setTimer(2)
-
-       // getTemasFromFirebase()
-
-
-
-
 
     }
 /*
@@ -134,10 +130,10 @@ class HomeActivity : AppCompatActivity(),
             {
                 if (conectionState){
                     if (!mainUILoaded)
-                    loadHome(true)
+                    checkInternetAndUser(true)
                 }
                 else{
-                    loadHome(false)
+                    checkInternetAndUser(false)
                 }
             },
             miliseconds
@@ -151,17 +147,17 @@ class HomeActivity : AppCompatActivity(),
         temasRef!!.addListenerForSingleValueEvent(object : ValueEventListener {
             override fun onDataChange(dataSnapshot: DataSnapshot) {
                 val temasList = TemasList()
+                Log.i("FIREBASE","Numero de hijos temas: ${dataSnapshot.childrenCount}")
                 for ( i in dataSnapshot.children){
                     temasList.temas.add(i.getValue(Tema::class.java)!!)
                 }
                 temasData.addUpdateTemas(temasList)
                 userData.ActualizarTemas(temasList)
-                retriveTemas()
-                if (!mainUILoaded)
-                    loadHome(true)
+                //retriveTemas()
+
             }
             override fun onCancelled(error: DatabaseError) {
-                Toast.makeText(this@HomeActivity,"Error de conexión",Toast.LENGTH_LONG).show()
+                Toast.makeText(this@HomeActivity,getString(R.string.error_conexion),Toast.LENGTH_LONG).show()
                 // Failed to read value
                 Log.i("TAG", "Failed to read value.", error.toException())
             }
@@ -173,29 +169,50 @@ class HomeActivity : AppCompatActivity(),
         // Read from the database
         preguntasRef!!.addListenerForSingleValueEvent(object : ValueEventListener {
             override fun onDataChange(dataSnapshot: DataSnapshot) {
-                // This method is called once with the initial value and again
-                // whenever data at this location is updated.
-                val value = dataSnapshot.getValue(PreguntasTotal::class.java)
+                val preguntasList = PreguntasTotal()
+                    Log.i("FIREBASE","Numero de hijos preguntas: ${dataSnapshot.childrenCount}")
+                for (i in dataSnapshot.children){
+                    Log.i("FIREBASE","Clave : ${i.key} , Valor : ${i.value}")
+                    preguntasList.totalPreguntas.add(i.getValue(PreguntasDificultad::class.java)!!)
+                }
+                preguntasData.addUpdatePreguntas(preguntasList)
+                retrivePreguntas()
+                if (!mainUILoaded)
+                    checkInternetAndUser(true)
 
             }
             override fun onCancelled(error: DatabaseError) {
-                Toast.makeText(this@HomeActivity,"Error de conexión",Toast.LENGTH_LONG).show()
+                Toast.makeText(this@HomeActivity,getString(R.string.error_conexion),Toast.LENGTH_LONG).show()
                 // Failed to read value
                 Log.i("TAG", "Failed to read value.", error.toException())
             }
         })
     }
 
-    fun saveUsuarioToFirebase(){
-
+    fun saveUsuarioToFirebase(user: User){
+        if (user.uid != null){
+            usuariosRef?.child(user.uid!!)?.setValue(user)
+        }
     }
 
-    fun loadHome(withInternet: Boolean){
+    fun checkInternetAndUser(withInternet: Boolean){
 
        if (userData.user.uid.isNullOrEmpty()){
             loadRegisterActivity()
         }
+        else{
+           loadHomeUi()
+       }
 
+        if (!withInternet){
+            Toast.makeText(this,getString(R.string.error_no_conection_no_data),Toast.LENGTH_LONG).show()
+        }
+
+        mainUILoaded = true
+    }
+
+    fun loadHomeUi(){
+        Log.i("TAG","printo la home")
         rootHome.background = getDrawable(R.drawable.gradient_background)
         val transition = TransitionInflater.from(this).inflateTransition(R.transition.no_transition)
         transition.duration = 0
@@ -208,15 +225,46 @@ class HomeActivity : AppCompatActivity(),
          *
          * */
         supportActionBar?.setDisplayShowTitleEnabled(false)
-        if (!withInternet){
-            Toast.makeText(this,"No se han podido actualizar los datos",Toast.LENGTH_LONG).show()
-        }
-        mainUILoaded = true
+
     }
 
     fun loadRegisterActivity(){
         val intent = Intent(this,RegisterActivity::class.java)
-        startActivity(intent)
+        startActivityForResult(intent,21)
+    }
+
+    fun loadGameSelectionActivity(view: View){
+
+        if (temasData.lista.temas.isEmpty()){
+            var snack = Snackbar.make(rootHome,getString(R.string.error_no_game_data),Snackbar.LENGTH_LONG)
+            var snackbarView = snack.view
+            snackbarView.setBackgroundColor(getColor(R.color.colorPrimary))
+            var snackTextView = snackbarView.findViewById<TextView>(android.support.design.R.id.snackbar_text)
+            snackTextView.setTextColor(getColor(android.R.color.background_light))
+            snack.setActionTextColor(getColor(android.R.color.background_light))
+            snack.setAction(getString(R.string.error_restart_app)) {
+                val i = baseContext.packageManager
+                    .getLaunchIntentForPackage(baseContext.packageName)
+                i!!.addFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP)
+                startActivity(i)
+            }
+            snack.show()
+        }
+        else{
+            val intent = Intent(this,SelectionActivity::class.java)
+            startActivity(intent)
+        }
+    }
+
+    override fun onActivityResult(requestCode: Int, resultCode: Int, data: Intent?) {
+
+        if (requestCode == 21 && resultCode == Activity.RESULT_OK){
+            userData.changeNickname(data?.getStringExtra("nickname")!!)
+            userData.setUid(data.getStringExtra("uid"))
+            loadHomeUi()
+        }
+
+        super.onActivityResult(requestCode, resultCode, data)
     }
 
     override fun onCreateOptionsMenu(menu: Menu): Boolean {
@@ -278,6 +326,14 @@ class HomeActivity : AppCompatActivity(),
             Log.i("TAG","Tema ${it.name}")
         }
     }
+    fun retrivePreguntas(){
+        preguntasData.listaPreguntasTotal.totalPreguntas[0].temas.forEach {
+            Log.i("PREGUNTAS","Preguntas de ${it.name}")
+            it.preguntas.forEach {
+                Log.i("PREGUNTAS",it.respuesta_correcta)
+            }
+        }
+    }
     /*
     fun retriveTemas(){
         userData.user.temas.facil.forEach {
@@ -299,6 +355,7 @@ class HomeActivity : AppCompatActivity(),
     fun showProfile(){
         val intent = Intent(this,ProfileActivity::class.java)
         startActivity(intent)
+        //overridePendingTransition(0,0)
         overridePendingTransition(R.anim.slide_from_right,R.anim.slide_to_left)
     }
 
@@ -306,8 +363,10 @@ class HomeActivity : AppCompatActivity(),
         var conectionState = false
         val USER_DATA = "userData"
         val TEMAS_DATA = "temasData"
+        val PREGUNTAS_DATA = "preguntasData"
         var userData = UserData()
         var temasData = TemaData()
+        var preguntasData = PreguntasData()
         var sharedPreferences: SharedPreferences? = null
         var gson : Gson? = null
     }
@@ -317,6 +376,7 @@ class HomeActivity : AppCompatActivity(),
         val json = gson?.toJson(user)
         prefsEditor?.putString(USER_DATA,json)
         prefsEditor?.apply()
+        saveUsuarioToFirebase(user)
     }
 
     override fun getUserData() {
@@ -334,9 +394,23 @@ class HomeActivity : AppCompatActivity(),
     }
 
     override fun getListaTemas() {
-        if (sharedPreferences!!.contains(USER_DATA)){
+        if (sharedPreferences!!.contains(TEMAS_DATA)){
             val json = sharedPreferences?.getString(TEMAS_DATA,"")
             temasData.lista = gson!!.fromJson(json,TemasList::class.java)
+        }
+    }
+
+    override fun savePreguntas(preguntas: PreguntasTotal) {
+        val prefsEditor = sharedPreferences?.edit()
+        val json = gson?.toJson(preguntas)
+        prefsEditor?.putString(PREGUNTAS_DATA,json)
+        prefsEditor?.apply()
+    }
+
+    override fun getPreguntas() {
+        if (sharedPreferences!!.contains(PREGUNTAS_DATA)){
+            val json = sharedPreferences?.getString(PREGUNTAS_DATA,"")
+            preguntasData.listaPreguntasTotal = gson!!.fromJson(json,PreguntasTotal::class.java)
         }
     }
 }

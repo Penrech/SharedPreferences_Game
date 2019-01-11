@@ -17,4 +17,19 @@
     <string name="profile_puntuacion_label">Puntuación</string>
     <string name="profile_ranking_label">Ranking</string>
     <string name="profile_nickname_error_too_short">El nickname debe tener más de 1 caracter</string>
+    <string name="dialog_title_exitApp">¿Salir de la App?</string>
+    <string name="dialog_message_need_to_be_register">Es necesario registrarse para acceder a la aplicación</string>
+    <string name="dialog_exit_button_text">Salir</string>
+    <string name="dialog_cancel_button_text">Cancelar</string>
+    <string name="error_no_conection_no_data">No se han podido actualizar los datos</string>
+    <string name="error_conexion">Error de conexión</string>
+    <string name="error_nickname_already_in_use">Ese nickname no está disponible</string>
+    <string name="error_no_game_data">No hay datos de juego</string>
+    <string name="error_restart_app">Reiniciar App</string>
+    <string name="selection_title">Seleccionar un tema</string>
+
+    <!-- TODO: Remove or change this placeholder text -->
+    <string name="hello_blank_fragment">Hello blank fragment</string>
+    <string name="selection_layout_actual_score">Puntuación actual</string>
+    <string name="counter_timeout">Timeout</string>
 </resources>

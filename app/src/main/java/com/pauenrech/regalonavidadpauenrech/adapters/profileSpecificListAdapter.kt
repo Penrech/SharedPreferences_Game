@@ -1,12 +1,11 @@
 package com.pauenrech.regalonavidadpauenrech.adapters
 
 import android.support.v7.widget.RecyclerView
-import android.util.Log
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
 import com.pauenrech.regalonavidadpauenrech.R
-import com.pauenrech.regalonavidadpauenrech.data.User
+import com.pauenrech.regalonavidadpauenrech.model.User
 import kotlinx.android.synthetic.main.profile_statics_card.view.*
 
 class profileSpecificListAdapter(var temasPorDificultad: MutableList<User.ThemeScore>)
