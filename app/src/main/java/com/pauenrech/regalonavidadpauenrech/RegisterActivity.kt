@@ -50,7 +50,8 @@ class RegisterActivity : AppCompatActivity() {
     fun validateWithFirebase(newNickname: String){
         setTimer(2)
         newUserId = usersRef?.push()?.key
-        usersRef?.orderByChild("nickname")?.equalTo(newNickname)?.addListenerForSingleValueEvent(object :
+        val lowerCaseNickname = newNickname.toLowerCase()
+        usersRef?.orderByChild("nicknameLowerCase")?.equalTo(lowerCaseNickname)?.addListenerForSingleValueEvent(object :
             ValueEventListener {
             override fun onDataChange(dataSnapshot: DataSnapshot) {
                 if (dataGet == false){

@@ -4,11 +4,15 @@ package com.pauenrech.regalonavidadpauenrech.fragments
 import android.content.Context
 import android.os.Bundle
 import android.support.v4.app.Fragment
+import android.transition.Transition
+import android.transition.TransitionInflater
+import android.transition.TransitionManager
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
 
 import com.pauenrech.regalonavidadpauenrech.R
+import kotlinx.android.synthetic.main.activity_selection.*
 import kotlinx.android.synthetic.main.fragment_start_game.view.*
 
 

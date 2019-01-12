@@ -1,5 +1,11 @@
 package com.pauenrech.regalonavidadpauenrech
 
+import android.app.Activity
+import android.content.Intent
+import android.gesture.Gesture
+import android.gesture.GestureLibraries
+import android.gesture.GestureLibrary
+import android.gesture.GestureOverlayView
 import android.graphics.Color
 import android.graphics.drawable.ColorDrawable
 import android.graphics.drawable.GradientDrawable
@@ -23,12 +29,16 @@ import android.support.v7.app.AlertDialog
 import android.transition.Transition
 import android.transition.TransitionInflater
 import android.view.LayoutInflater
+import android.widget.Toast
 import com.pauenrech.regalonavidadpauenrech.adapters.selectionViewPager
 import com.pauenrech.regalonavidadpauenrech.fragments.*
 import com.pauenrech.regalonavidadpauenrech.model.User
 import com.pauenrech.regalonavidadpauenrech.tools.CustomViewPager
+import kotlinx.android.synthetic.main.activity_selection.*
 import kotlinx.android.synthetic.main.custom_alert_dialog.view.*
 import kotlinx.android.synthetic.main.fragment_end_game.*
+import kotlinx.android.synthetic.main.fragment_start_game.*
+import kotlinx.android.synthetic.main.fragment_start_game.view.*
 import java.lang.Exception
 
 
@@ -37,7 +47,11 @@ private lateinit var mPager: CustomViewPager
 class GameActivity : AppCompatActivity(),
     StartGameFragment.clickListener,
     EndGameFragment.clickListener,
-    QuestionFragment.clickListener{
+    QuestionFragment.gestureDetectorListener{
+
+    enum class TypeAnswer{
+        Timeout, Correct, Incorrect, StartGame
+    }
 
     enum class GameState{
         PreInit, Running, Paused, Finish
@@ -46,6 +60,12 @@ class GameActivity : AppCompatActivity(),
     enum class TimerState{
         Stopped, Paused, Running
     }
+
+    companion object {
+        var gestureLibrary: GestureLibrary? = null
+    }
+
+
 
     var textTransition : Transition? = null
     var controlFragmentReference: GameControllerFragment? = null
@@ -60,6 +80,7 @@ class GameActivity : AppCompatActivity(),
     var actualPosition: Int = 0
     var fragmentsList: MutableList<Fragment> = mutableListOf()
     var pagerAdapter: selectionViewPager? = null
+    var questionAnswersList: MutableList<Boolean> = mutableListOf()
     var userReference = HomeActivity.userData
     var temasReference = HomeActivity.temasData.lista.temas
     var preguntasReference = HomeActivity.preguntasData.listaPreguntasTotal.totalPreguntas
@@ -75,7 +96,7 @@ class GameActivity : AppCompatActivity(),
         setContentView(R.layout.activity_game)
 
         controlFragmentReference = gameControllerFragment as GameControllerFragment
-
+        cargarGestos()
 
         temaID = intent.getStringExtra("temaID")
         val title = intent.getStringExtra("title")
@@ -105,7 +126,7 @@ class GameActivity : AppCompatActivity(),
             override fun onPageScrolled(position: Int, positionOffset: Float, positionOffsetPixels: Int) {
             }
             override fun onPageSelected(position: Int) {
-                Log.i("ANSWER","Pagina seleccionada: $position")
+
 
                 if (position > 0 && position < 11){
                     hideCorrectionLabel()
@@ -137,11 +158,18 @@ class GameActivity : AppCompatActivity(),
 
     }
 
+    fun cargarGestos() {
+        gestureLibrary = GestureLibraries.fromRawResource(this, R.raw.gestures)
+        if (gestureLibrary?.load() == false) {
+            Toast.makeText(this, getString(R.string.error_loading_gestures), Toast.LENGTH_LONG).show()
+            finish()
+        }
+
+    }
+
+
     fun fillPageViewer(){
-        /*userDataReference.user.temas[userDataReference.user.dificultad].forEach {userTheme->
-            val theme = temasDataReference.filter { it.id == userTheme.id}[0]
-            fragmentsList.add(ThemeSelectionFragment.newInstance(userTheme.name,userTheme.score,theme.colorStart,theme.colorEnd,theme.id))
-        }*/
+
         startFragment = StartGameFragment()
         fragmentsList.add(startFragment!!)
         val actualTemaRef = preguntasReference[userReference.user.dificultad].temas.filter { it.id == temaID }
@@ -151,6 +179,7 @@ class GameActivity : AppCompatActivity(),
                 valorPregunta = pregunta.puntuacion
             }
             val randomAnswer = pregunta.getRandomAnswer()
+            questionAnswersList.add(randomAnswer.second)
             fragmentsList.add(QuestionFragment.newInstance(pregunta.id!!,randomAnswer.first,randomAnswer.second,index + 1))
         }
         endFragment = EndGameFragment()
@@ -192,10 +221,10 @@ class GameActivity : AppCompatActivity(),
     fun onTimerFinished(){
         timerState = TimerState.Paused
         if (actualPosition == 0){
-            showCorrectionLabel(R.string.counter_start_game)
+            showCorrectionLabel(R.string.counter_start_game,TypeAnswer.StartGame)
         }
         else{
-            showCorrectionLabel(R.string.counter_timeout)
+            showCorrectionLabel(R.string.counter_timeout,TypeAnswer.Timeout)
         }
 
         wait1secondAndPass()
@@ -203,20 +232,39 @@ class GameActivity : AppCompatActivity(),
 
     fun onUserAswer(isUserRight: Boolean){
 
-        if (timerState == TimerState.Running){
+        if (timerState == TimerState.Running && gameState == GameState.Running){
             timerState = TimerState.Paused
             timer?.cancel()
             if (isUserRight) {
-                showCorrectionLabel(R.string.counter_correct)
+                showCorrectionLabel(R.string.counter_correct,TypeAnswer.Correct)
                 updateStarRatingUI()
             }
             else
-                showCorrectionLabel(R.string.counter_incorrect)
+                showCorrectionLabel(R.string.counter_incorrect,TypeAnswer.Incorrect)
             wait1secondAndPass()
         }
     }
 
-    fun showCorrectionLabel(message: Int){
+    fun showCorrectionLabel(message: Int, answerType: TypeAnswer){
+
+        when(answerType){
+            TypeAnswer.Timeout ->{
+                controlFragmentReference?.gameControllerTimer?.setTextColor(getColor(android.R.color.background_light))
+                controlFragmentReference?.gameControllerCorrection?.setTextColor(getColor(android.R.color.background_light))
+            }
+            TypeAnswer.Correct ->{
+                controlFragmentReference?.gameControllerTimer?.setTextColor(getColor(R.color.colorGradientEnd))
+                controlFragmentReference?.gameControllerCorrection?.setTextColor(getColor(R.color.colorGradientEnd))
+            }
+            TypeAnswer.Incorrect ->{
+                controlFragmentReference?.gameControllerTimer?.setTextColor(getColor(R.color.colorNoTick))
+                controlFragmentReference?.gameControllerCorrection?.setTextColor(getColor(R.color.colorNoTick))
+            }
+            TypeAnswer.StartGame ->{
+                controlFragmentReference?.gameControllerTimer?.setTextColor(getColor(android.R.color.background_light))
+                controlFragmentReference?.gameControllerCorrection?.setTextColor(getColor(android.R.color.background_light))
+            }
+        }
 
         TransitionManager.beginDelayedTransition(rootGame,textTransition)
         controlFragmentReference?.gameControllerCorrection?.text = getString(message)
@@ -229,17 +277,25 @@ class GameActivity : AppCompatActivity(),
     }
 
     fun hideCorrectionLabel(){
+        controlFragmentReference?.gameControllerTimer?.setTextColor(getColor(android.R.color.background_light))
+        controlFragmentReference?.gameControllerCorrection?.setTextColor(getColor(android.R.color.background_light))
+
         TransitionManager.beginDelayedTransition(rootGame,textTransition)
         controlFragmentReference?.gameControllerCorrection?.visibility = View.GONE
         val params = controlFragmentReference?.gameControllerTimer?.getLayoutParams() as ConstraintLayout.LayoutParams
         params.horizontalBias = 0.5f // here is one modification for example. modify anything else you want :)
         controlFragmentReference?.gameControllerTimer?.setLayoutParams(params) // request the view to use the new modified params
-        segundosQueQuedan = 5
+        segundosQueQuedan = 10
         updateCountdownUI()
         startTimer()
     }
 
     fun lastPageLabel(){
+        controlFragmentReference?.gameControllerTimer?.setTextColor(getColor(android.R.color.background_light))
+        controlFragmentReference?.gameControllerCorrection?.setTextColor(getColor(android.R.color.background_light))
+        segundosQueQuedan = 0
+        updateCountdownUI()
+
         TransitionManager.beginDelayedTransition(rootGame,textTransition)
         endFragment?.endGameCardRatingBar?.rating = (pointsGained / 2f)
         endFragment?.endGameCorrectAnswers?.text = "$pointsGained/10"
@@ -334,25 +390,24 @@ class GameActivity : AppCompatActivity(),
 
     }
 
-    override fun questionCardClick(isTrue: Boolean, position: Int) {
-        if (gameState == GameState.Running){
-        onUserAswer(isTrue == true)
-        }
-
-    }
-
     override fun onEndGameButtonClick() {
         finish()
     }
 
     override fun onStartGameButtonClick() {
         if (gameState == GameState.PreInit){
+            TransitionManager.beginDelayedTransition(rootGame,textTransition)
+            startFragment?.startGameButton?.visibility = View.INVISIBLE
+            startFragment?.startGameSpinner?.visibility = View.VISIBLE
             gameState = GameState.Running
             segundosQueQuedan = 5
             startTimer()
         }
     }
 
+    override fun onGestureDetected(isTrue: Boolean) {
+        onUserAswer(isTrue)
+    }
 
     override fun onPause() {
         pauseGameAndTimer()
@@ -366,13 +421,16 @@ class GameActivity : AppCompatActivity(),
     }
 
     override fun onBackPressed() {
-        if (gameState != GameState.Finish)
-            createDialog()
-        else
+        if (gameState == GameState.Finish || gameState == GameState.PreInit)
             super.onBackPressed()
+        else
+            createDialog()
     }
 
     override fun finish() {
+        val intentRetorno = Intent()
+        intentRetorno.putExtra("temaID",temaID)
+        setResult(Activity.RESULT_OK,intentRetorno)
         super.finish()
         overridePendingTransition(R.anim.slide_from_left,R.anim.slide_to_right)
     }
@@ -419,3 +477,5 @@ class GameActivity : AppCompatActivity(),
 
 
 }
+
+

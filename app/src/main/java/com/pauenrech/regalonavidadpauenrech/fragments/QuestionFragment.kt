@@ -2,17 +2,22 @@ package com.pauenrech.regalonavidadpauenrech.fragments
 
 
 import android.content.Context
+import android.gesture.Gesture
+import android.gesture.GestureOverlayView
 import android.os.Bundle
 import android.support.v4.app.Fragment
+import android.util.Log
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
+import com.pauenrech.regalonavidadpauenrech.GameActivity
 
 import com.pauenrech.regalonavidadpauenrech.R
 import kotlinx.android.synthetic.main.fragment_question.*
 import kotlinx.android.synthetic.main.fragment_question.view.*
 
-class QuestionFragment : Fragment() {
+class QuestionFragment : Fragment(),
+    GestureOverlayView.OnGesturePerformedListener{
 
     companion object {
         fun newInstance(id: String, question: String, isTrue: Boolean, position: Int): QuestionFragment {
@@ -27,21 +32,23 @@ class QuestionFragment : Fragment() {
         }
     }
 
-    var activityCallback: QuestionFragment.clickListener? = null
-    interface clickListener{
-       fun questionCardClick(isTrue: Boolean, position: Int)
+    var activityCallback: QuestionFragment.gestureDetectorListener? = null
+    interface gestureDetectorListener{
+        fun onGestureDetected(isTrue: Boolean)
     }
+
+    var rootView: View? = null
+    var preguntaCorrecta: Boolean? = null
 
     override fun onCreateView(
         inflater: LayoutInflater, container: ViewGroup?,
         savedInstanceState: Bundle?
     ): View? {
         // Inflate the layout for this fragment
-        val rootView = inflater.inflate(R.layout.fragment_question, container, false)
-        rootView.questionFragmentPregunta.text = arguments?.getString("question")
-        rootView.questionCardView.setOnClickListener {
-            activityCallback!!.questionCardClick(arguments?.getBoolean("isTrue")!!,arguments?.getInt("position")!!)
-        }
+        preguntaCorrecta = arguments?.getBoolean("isTrue")
+        rootView = inflater.inflate(R.layout.fragment_question, container, false)
+        rootView!!.questionFragmentPregunta.text = arguments?.getString("question")
+        rootView!!.gestureOverlayQuestion.addOnGesturePerformedListener(this)
         return rootView
     }
 
@@ -49,7 +56,7 @@ class QuestionFragment : Fragment() {
 
         super.onAttach(context)
         try {
-            activityCallback = context as clickListener
+            activityCallback = context as gestureDetectorListener
         } catch (error: ClassCastException){
             throw ClassCastException("Necesitamos que algún objecto implemente el clickListener")
         }
@@ -60,5 +67,20 @@ class QuestionFragment : Fragment() {
         activityCallback = null
     }
 
+    override fun onGesturePerformed(overlay: GestureOverlayView?, gesture: Gesture?) {
 
+        val prediction = GameActivity.gestureLibrary?.recognize(gesture)
+        prediction?.let {
+            if(it.size > 0 && it[0].score > 2.0){
+                if (it[0].name == "tick"){
+                   activityCallback!!.onGestureDetected(preguntaCorrecta == true)
+                }
+                if (it[0].name == "inverse_tick"){
+                    activityCallback!!.onGestureDetected(preguntaCorrecta == false)
+                }
+                rootView?.gestureOverlayQuestion?.visibility = View.GONE
+                rootView?.gestureOverlayQuestion?.removeAllOnGesturePerformedListeners()
+            }
+        }
+    }
 }

@@ -32,15 +32,29 @@ import com.google.firebase.database.DataSnapshot
 import com.google.firebase.database.ValueEventListener
 
 
+/**
+*
+* Aquí se instancian 3 interfaces que sirven para obtener información de eventos de diversas clases modelo
+ *
+ * Es la clase principal, se utiliza como lazo de unión entre la base de datos local en shared preferences y la
+ * aplicación
+*
+* */
 class HomeActivity : AppCompatActivity(),
+    /**
+     *
+     *
+     */
     UserData.SaveAndGetLocalUserData,
     TemaData.SaveOrGetListaTemas,
     PreguntasData.SaveAndGetListaPreguntas{
 
 
 
+
     var loadingScene : Scene? = null
     var homeScene: Scene? = null
+
     var transitionOnceLoaded: Transition? = null
     var database : FirebaseDatabase? = null
     var conectionRef: DatabaseReference? = null
@@ -280,6 +294,14 @@ class HomeActivity : AppCompatActivity(),
         return when (item.itemId) {
             R.id.action_profile -> {
                 showProfile()
+                true
+            }
+            R.id.action_ranking ->{
+                Toast.makeText(this,getString(R.string.development_not_implemented),Toast.LENGTH_LONG).show()
+                true
+            }
+            R.id.action_help ->{
+                Toast.makeText(this,getString(R.string.development_not_implemented),Toast.LENGTH_LONG).show()
                 true
             }
             else -> super.onOptionsItemSelected(item)

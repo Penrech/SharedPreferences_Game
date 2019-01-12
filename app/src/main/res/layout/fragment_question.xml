@@ -11,6 +11,20 @@
             android:layout_width="match_parent"
             android:layout_height="match_parent">
 
+        <android.gesture.GestureOverlayView
+                android:layout_width="match_parent"
+                android:layout_height="match_parent"
+                android:id="@+id/gestureOverlayQuestion"
+                android:gestureColor="@color/colorGradientEnd"
+                android:uncertainGestureColor="@color/colorNoTick"
+                android:eventsInterceptionEnabled="true"
+                app:layout_constraintTop_toTopOf="parent"
+                app:layout_constraintBottom_toBottomOf="parent"
+                app:layout_constraintEnd_toEndOf="parent"
+                app:layout_constraintStart_toStartOf="parent">
+
+        </android.gesture.GestureOverlayView>
+
         <android.support.v7.widget.CardView
                 android:layout_width="match_parent"
                 android:layout_height="0dp"

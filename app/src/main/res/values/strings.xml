@@ -40,4 +40,6 @@
     <string name="custom_dialog_leave_game_message">Al salir sin acabar se perderán todos los avances de la partida
     </string>
     <string name="counter_start_game">Adelante!</string>
+    <string name="error_loading_gestures">Error cargando datos de juego</string>
+    <string name="development_not_implemented">No implementado</string>
 </resources>

@@ -2,16 +2,19 @@ package com.pauenrech.regalonavidadpauenrech
 
 import android.support.v7.app.AppCompatActivity
 import android.os.Bundle
+import android.os.Handler
 import android.support.v7.widget.RecyclerView
+import android.util.Log
 import android.view.View
 import kotlinx.android.synthetic.main.activity_profile.*
 import android.view.inputmethod.InputMethodManager
 import android.widget.SeekBar
-import com.google.firebase.database.DatabaseReference
-import com.google.firebase.database.FirebaseDatabase
+import android.widget.Toast
+import com.google.firebase.database.*
 import com.pauenrech.regalonavidadpauenrech.adapters.profileSpecificListAdapter
 import com.pauenrech.regalonavidadpauenrech.model.User
 import com.pauenrech.regalonavidadpauenrech.layoutManagers.NoScrollLinearLayoutManager
+import kotlinx.android.synthetic.main.activity_register.*
 
 
 class ProfileActivity : AppCompatActivity() {
@@ -24,6 +27,10 @@ class ProfileActivity : AppCompatActivity() {
     val userDataReference = HomeActivity.userData
     var database : FirebaseDatabase? = null
     var usersRef: DatabaseReference? = null
+    var nicknameChanged: Boolean = true
+    var handler: Handler? = null
+    var runnable: Runnable? = null
+
 
     /**
      *
@@ -36,6 +43,16 @@ class ProfileActivity : AppCompatActivity() {
         setContentView(R.layout.activity_profile)
         database = FirebaseDatabase.getInstance()
         usersRef = database?.getReference("usuarios")
+
+        handler = Handler()
+        runnable = Runnable {
+            Log.i("TAG","Estoy Corriendo")
+            if (!nicknameChanged){
+                imm?.hideSoftInputFromWindow(profileNickNameEdit.windowToken, 0);
+                Toast.makeText(this,getString(R.string.error_no_conection_no_data),Toast.LENGTH_LONG).show()
+                setNicknameNoEditable(true)
+            }
+        }
         /**
          *
          * Inserto el valor de los datos del usuario en sus correspondientes lugares, extraigo los datos del homeActivity
@@ -106,6 +123,7 @@ class ProfileActivity : AppCompatActivity() {
              *
              * */
             if (profileNickName.visibility == View.VISIBLE){
+                nicknameChanged = false
                 profileNickNameEdit.setText(profileNickName.text.toString())
                 profileChangeNicknameBtn.setImageResource(R.drawable.ic_round_done_24px_white)
                 profileNickName.visibility = View.GONE
@@ -169,18 +187,80 @@ class ProfileActivity : AppCompatActivity() {
                    profileNicknameErrorLabel.visibility = View.VISIBLE
                    profileNicknameErrorLabel.text = getString(R.string.profile_nickname_error_too_short)
                }
-               //todo validar con firebase
-               else{
-                    if (profileNicknameErrorLabel.visibility == View.VISIBLE){
-                        profileNicknameErrorLabel.visibility = View.GONE
-                    }
-                   userDataReference.changeNickname(profileNickNameEdit.text.toString())
-                    profileNickName.text = userDataReference.user.nickname
-                    profileChangeNicknameBtn.setImageResource(R.drawable.ic_round_edit_24px_white)
-                    profileNickName.visibility = View.VISIBLE
-                    profileNickNameEdit.visibility = View.GONE
-                    imm?.hideSoftInputFromWindow(profileNickNameEdit.windowToken, 0);
+               else if (profileNickNameEdit.text.toString() == userDataReference.user.nickname){
+                   setNicknameNoEditable(true)
                }
+               else{
+                    validateWithFirebase(profileNickNameEdit.text.toString())
+               }
+    }
+
+    fun setNicknameNoEditable(error: Boolean){
+        if (profileNicknameErrorLabel.visibility == View.VISIBLE){
+            profileNicknameErrorLabel.visibility = View.GONE
+        }
+
+        profileChangeNicknameBtn.visibility = View.VISIBLE
+        profileNicknameLoading.visibility = View.GONE
+
+        if (!error)
+            userDataReference.changeNickname(profileNickNameEdit.text.toString())
+
+        profileNickName.text = userDataReference.user.nickname
+        profileChangeNicknameBtn.setImageResource(R.drawable.ic_round_edit_24px_white)
+        profileNickName.visibility = View.VISIBLE
+        profileNickNameEdit.visibility = View.GONE
+        imm?.hideSoftInputFromWindow(profileNickNameEdit.windowToken, 0);
+        nicknameChanged = true
+    }
+
+    fun validateWithFirebase(newNickname: String){
+        profileChangeNicknameBtn.visibility = View.INVISIBLE
+        profileNicknameLoading.visibility = View.VISIBLE
+        setTimer(2)
+        val lowerCaseNickname = newNickname.toLowerCase()
+        usersRef?.orderByChild("nicknameLowerCase")?.equalTo(lowerCaseNickname)?.addListenerForSingleValueEvent(object :
+            ValueEventListener {
+            override fun onDataChange(dataSnapshot: DataSnapshot) {
+                if (nicknameChanged == false){
+                    if (dataSnapshot.childrenCount > 0){
+                        profileChangeNicknameBtn.visibility = View.VISIBLE
+                        profileNicknameLoading.visibility = View.GONE
+                        profileNicknameErrorLabel.text = getString(R.string.error_nickname_already_in_use)
+                        profileNicknameErrorLabel.visibility = View.VISIBLE
+                        handler?.removeCallbacks(runnable)
+                    }
+                    else{
+                       setNicknameNoEditable(false)
+                    }
+
+
+                }
+            }
+            override fun onCancelled(error: DatabaseError) {
+                if (nicknameChanged == false) {
+                    Toast.makeText(this@ProfileActivity, getString(R.string.error_conexion), Toast.LENGTH_LONG).show()
+                    setNicknameNoEditable(true)
+                }
+                Log.i("TAG", "Failed to read value.", error.toException())
+            }
+        })
+    }
+
+    fun setTimer(seconds: Int){
+        nicknameChanged = false
+        val miliseconds = (seconds * 1000).toLong()
+        handler!!.postDelayed(runnable,miliseconds)
+
+
+    }
+
+    override fun onBackPressed() {
+        if (nicknameChanged == false){
+            setNicknameNoEditable(true)
+        }
+        else
+            super.onBackPressed()
     }
 
     /**
@@ -189,6 +269,7 @@ class ProfileActivity : AppCompatActivity() {
      *
      * */
     override fun finish() {
+        handler?.removeCallbacks(runnable)
         userDataReference.changeDificultad((profile_seekBar.progress))
         imm?.hideSoftInputFromWindow(profileNickNameEdit.windowToken, 0);
         super.finish()

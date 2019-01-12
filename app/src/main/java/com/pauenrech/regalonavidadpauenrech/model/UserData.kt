@@ -24,6 +24,7 @@ class UserData(var user: User = User(),
 
     fun changeNickname(nickname: String){
         this.user.nickname = nickname
+        this.user.nicknameLowerCase = nickname.toLowerCase()
         savingInterface?.saveUserData(this.user)
     }
 

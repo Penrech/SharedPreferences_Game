@@ -7,6 +7,7 @@ import android.graphics.Color
 import android.graphics.drawable.GradientDrawable
 import android.os.Bundle
 import android.support.v4.app.Fragment
+import android.support.v4.graphics.ColorUtils
 import android.util.Log
 import android.view.LayoutInflater
 import android.view.View
@@ -34,6 +35,7 @@ class ThemeSelectionFragment : Fragment() {
     }
 
     var activityCallback: ThemeSelectionFragment.clickListener? = null
+    var rootView: View? = null
    interface clickListener{
        fun onCardClicked(title: String, startColor: String, endColor: String,temaId: String)
    }
@@ -43,26 +45,21 @@ class ThemeSelectionFragment : Fragment() {
         savedInstanceState: Bundle?
     ): View? {
         // Inflate the layout for this fragment
-        val rootView = inflater.inflate(R.layout.fragment_theme_selection, container, false)
+        rootView = inflater.inflate(R.layout.fragment_theme_selection, container, false)
         val temaId = arguments?.getString("temaId")
         val cardTitle = arguments?.getString("cardTitle")
         val startColorString = arguments?.getString("startColor")
         val endColorString = arguments?.getString("endColor")
         val startColor = Color.parseColor(startColorString)
         val endColor = Color.parseColor(endColorString)
-        rootView.selectionCardTitle.text = cardTitle
-        rootView.selectionCardView.setCardBackgroundColor(endColor)
+        val semiTransparentColor = ColorUtils.setAlphaComponent(endColor,175)
+        rootView!!.selectionCardTitle.text = cardTitle
+        rootView!!.selectionCardView.setCardBackgroundColor(semiTransparentColor)
         arguments?.getInt("cardScore").let {
-            rootView.selectionCardRatingBar.rating = (it!! / 2f)
+            rootView!!.selectionCardRatingBar.rating = (it!! / 2f)
         }
-        rootView.selectionCardView.setOnClickListener {
+        rootView!!.selectionCardView.setOnClickListener {
             activityCallback!!.onCardClicked(cardTitle!!,startColorString!!,endColorString!!,temaId!!)
-            /*val intent = Intent(container?.context,GameActivity::class.java)
-            intent.putExtra("title",cardTitle)
-            intent.putExtra("startColor",startColorString)
-            intent.putExtra("endColor",endColorString)
-            startActivity(intent)
-            overridePendingTransition(R.anim.slide_from_right,R.anim.slide_to_left)*/
         }
         return rootView
 
@@ -83,16 +80,7 @@ class ThemeSelectionFragment : Fragment() {
         super.onDetach()
         activityCallback = null
     }
-/*
-    override fun onActivityCreated(savedInstanceState: Bundle?) {
-        var args = arguments
-        Log.i("FRAGMENT","${args}")
-        if (args != null){
-            selectionCardTitle.text = args.getString("cardTitle")
-            selectionCardRatingBar.rating = (args.getInt("cardScore") / 2f)
-        }
-        super.onActivityCreated(savedInstanceState)
-    }*/
+
 
 
 

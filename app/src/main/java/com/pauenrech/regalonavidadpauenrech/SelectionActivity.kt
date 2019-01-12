@@ -1,5 +1,6 @@
 package com.pauenrech.regalonavidadpauenrech
 
+import android.app.Activity
 import android.content.Intent
 import android.support.v7.app.AppCompatActivity
 import android.os.Bundle
@@ -8,6 +9,8 @@ import android.support.v4.view.ViewPager
 import android.util.Log
 import com.pauenrech.regalonavidadpauenrech.adapters.selectionViewPager
 import com.pauenrech.regalonavidadpauenrech.fragments.ThemeSelectionFragment
+import kotlinx.android.synthetic.main.fragment_theme_selection.*
+import java.lang.Exception
 
 
 private lateinit var mPager: ViewPager
@@ -17,6 +20,7 @@ class SelectionActivity : AppCompatActivity(), ThemeSelectionFragment.clickListe
     val userDataReference = HomeActivity.userData
     val temasDataReference = HomeActivity.temasData.lista.temas
     var fragmentsList: MutableList<ThemeSelectionFragment> = mutableListOf()
+    var themeInFragmentId: MutableList<String> = mutableListOf()
     var pagerAdapter: selectionViewPager? = null
 
     override fun onCreate(savedInstanceState: Bundle?) {
@@ -53,10 +57,20 @@ class SelectionActivity : AppCompatActivity(), ThemeSelectionFragment.clickListe
         userDataReference.user.temas[userDataReference.user.dificultad].forEach {userTheme->
             val theme = temasDataReference.filter { it.id == userTheme.id}[0]
             fragmentsList.add(ThemeSelectionFragment.newInstance(userTheme.name,userTheme.score,theme.colorStart,theme.colorEnd,theme.id))
+            themeInFragmentId.add(theme.id)
         }
         // The pager adapter, which provides the pages to the view pager widget.
         pagerAdapter = selectionViewPager(supportFragmentManager,fragmentsList)
         mPager.adapter = pagerAdapter
+    }
+
+    fun refreshPageViewer(temaId: String){
+       val index = themeInFragmentId.indexOf(temaId)
+        val score = userDataReference.user.getTemaScore(temaId)
+        if (score != -1){
+            val fragmentToChange = fragmentsList[index]
+            fragmentToChange.selectionCardRatingBar.rating = (score / 2f)
+        }
     }
 
     override fun onCardClicked(title: String, startColor: String, endColor: String, temaId: String) {
@@ -65,7 +79,16 @@ class SelectionActivity : AppCompatActivity(), ThemeSelectionFragment.clickListe
         intent.putExtra("temaID",temaId)
         intent.putExtra("startColor",startColor)
         intent.putExtra("endColor",endColor)
-        startActivity(intent)
+        startActivityForResult(intent,101)
         overridePendingTransition(R.anim.slide_from_right,R.anim.slide_to_left)
+    }
+
+    override fun onActivityResult(requestCode: Int, resultCode: Int, data: Intent?) {
+        Log.i("Tag","HOLA, resultcode: $resultCode")
+        if (requestCode == 101 && resultCode == Activity.RESULT_OK){
+            val temaId = data?.getStringExtra("temaID")
+            refreshPageViewer(temaId!!)
+        }
+        super.onActivityResult(requestCode, resultCode, data)
     }
 }

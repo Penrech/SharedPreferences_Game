@@ -3,6 +3,7 @@ package com.pauenrech.regalonavidadpauenrech.model
 class User(
     var uid: String? = null,
     var nickname: String = "Username",
+    var nicknameLowerCase: String = "username",
     var dificultad: Int = 0,
     var puntuacion: Int = 0,
     var ranking: Int = -1,
