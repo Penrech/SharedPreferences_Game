@@ -9,24 +9,31 @@ import android.view.View
 import android.view.ViewGroup
 
 import com.pauenrech.regalonavidadpauenrech.R
-import kotlinx.android.synthetic.main.fragment_start_game.view.*
+import kotlinx.android.synthetic.main.fragment_end_game.view.*
 
 
-class StartGameFragment : Fragment() {
+class EndGameFragment : Fragment() {
 
-    var activityCallback: StartGameFragment.clickListener? = null
+    var activityCallback: EndGameFragment.clickListener? = null
+
     interface clickListener{
-        fun onStartGameButtonClick()
+        fun onEndGameButtonClick()
     }
+
+    companion object {
+        var endFragmentView: View? = null
+    }
+
 
     override fun onCreateView(
         inflater: LayoutInflater, container: ViewGroup?,
         savedInstanceState: Bundle?
     ): View? {
         // Inflate the layout for this fragment
-        val rootView = inflater.inflate(R.layout.fragment_start_game, container, false)
-        rootView.startGameButton.setOnClickListener {
-            activityCallback!!.onStartGameButtonClick()
+        val rootView = inflater.inflate(R.layout.fragment_end_game, container, false)
+        endFragmentView = rootView
+        rootView.endGameButton.setOnClickListener {
+            activityCallback!!.onEndGameButtonClick()
         }
         return rootView
     }
@@ -45,6 +52,5 @@ class StartGameFragment : Fragment() {
         super.onDetach()
         activityCallback = null
     }
-
 
 }

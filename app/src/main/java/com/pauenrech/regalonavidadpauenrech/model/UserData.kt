@@ -8,6 +8,7 @@ class UserData(var user: User = User(),
 
     interface SaveAndGetLocalUserData{
         fun saveUserData(user: User)
+        fun updateMainPuntuacionTextView(puntuacion: Int)
         fun getUserData()
     }
 
@@ -34,6 +35,7 @@ class UserData(var user: User = User(),
     fun changePuntuacion(puntuacion: Int){
         this.user.puntuacion = puntuacion
         savingInterface?.saveUserData(this.user)
+        savingInterface?.updateMainPuntuacionTextView(puntuacion)
     }
 
     fun changeThemeScore(newScore: Int, dificultad: Int, temaId: String){
@@ -45,6 +47,12 @@ class UserData(var user: User = User(),
     fun changeRanking(ranking: Int){
         this.user.ranking = ranking
         savingInterface?.saveUserData(this.user)
+    }
+
+    fun actualizarPuntuacionTema(idTema: String,score: Int){
+        user.modifyTemaScore(idTema,score)
+        savingInterface?.saveUserData(this.user)
+
     }
 
     fun ActualizarTemas(_temas: TemasList){

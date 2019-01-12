@@ -50,6 +50,14 @@ class User(
         }
     }
 
+    fun modifyTemaScore(id: String, score: Int){
+        temas[dificultad].filter { it.id == id }[0].score = score
+    }
+
+    fun getTemaScore(id: String): Int{
+        return temas[dificultad].filter { it.id == id }[0].score
+    }
+
     fun addTemaLista(name: String, id: String){
 
         if (!listaTemas.contains(id)) {

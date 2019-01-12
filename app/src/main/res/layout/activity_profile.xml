@@ -267,8 +267,8 @@
                             android:layout_marginEnd="8dp" android:text="@string/profile_puntuacion_label"
                             app:layout_constraintHorizontal_chainStyle="spread_inside"/>
                     <TextView
-                            android:text="100005554"
-                            android:layout_width="wrap_content"
+                            android:text="500000"
+                            android:layout_width="0dp"
                             android:layout_height="wrap_content"
                             android:id="@+id/profilePuntuacionGlobalText"
                             app:layout_constraintEnd_toEndOf="parent"
@@ -280,7 +280,7 @@
                             app:layout_constraintHorizontal_bias="0.5"
                             android:textSize="16sp"
                             android:textColor="@android:color/background_light"
-                            android:fontFamily="@font/comfortaa_bold"/>
+                            android:fontFamily="@font/comfortaa_bold" android:textAlignment="textEnd"/>
                     <ImageView
                             android:layout_width="24dp"
                             android:layout_height="24dp"
@@ -308,7 +308,7 @@
                             app:layout_constraintHorizontal_chainStyle="spread_inside" android:layout_marginEnd="8dp"/>
                     <TextView
                             android:text="150"
-                            android:layout_width="wrap_content"
+                            android:layout_width="0dp"
                             android:layout_height="wrap_content"
                             android:id="@+id/profileRanking"
                             app:layout_constraintEnd_toEndOf="parent"
@@ -320,7 +320,7 @@
                             app:layout_constraintHorizontal_bias="0.5"
                             android:textSize="16sp"
                             android:textColor="@android:color/background_light"
-                            android:fontFamily="@font/comfortaa_bold"/>
+                            android:fontFamily="@font/comfortaa_bold" android:textAlignment="textEnd"/>
                     <ImageView
                             android:layout_width="24dp"
                             android:layout_height="24dp"

@@ -379,6 +379,10 @@ class HomeActivity : AppCompatActivity(),
         saveUsuarioToFirebase(user)
     }
 
+    override fun updateMainPuntuacionTextView(puntuacion: Int) {
+        homeHighScore.text = "$puntuacion"
+    }
+
     override fun getUserData() {
         if (sharedPreferences!!.contains(USER_DATA)){
             val json = sharedPreferences?.getString(USER_DATA,"")

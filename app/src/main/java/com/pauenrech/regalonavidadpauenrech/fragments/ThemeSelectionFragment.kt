@@ -51,7 +51,7 @@ class ThemeSelectionFragment : Fragment() {
         val startColor = Color.parseColor(startColorString)
         val endColor = Color.parseColor(endColorString)
         rootView.selectionCardTitle.text = cardTitle
-        rootView.selectionCardView.setCardBackgroundColor(startColor)
+        rootView.selectionCardView.setCardBackgroundColor(endColor)
         arguments?.getInt("cardScore").let {
             rootView.selectionCardRatingBar.rating = (it!! / 2f)
         }

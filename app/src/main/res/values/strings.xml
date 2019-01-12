@@ -32,4 +32,12 @@
     <string name="hello_blank_fragment">Hello blank fragment</string>
     <string name="selection_layout_actual_score">Puntuación actual</string>
     <string name="counter_timeout">Timeout</string>
+    <string name="initial_card_view_reminder_1">Dibuja un tick para marcar la afirmación como correcta</string>
+    <string name="initial_card_view_reminder_2">Dibuja un tick invertido para marcar la afirmación como falsa</string>
+    <string name="counter_correct">Correcto</string>
+    <string name="counter_incorrect">Incorrecto</string>
+    <string name="custom_dialog_leave_game">¿Dejar la partida?</string>
+    <string name="custom_dialog_leave_game_message">Al salir sin acabar se perderán todos los avances de la partida
+    </string>
+    <string name="counter_start_game">Adelante!</string>
 </resources>

@@ -62,6 +62,7 @@ class SelectionActivity : AppCompatActivity(), ThemeSelectionFragment.clickListe
     override fun onCardClicked(title: String, startColor: String, endColor: String, temaId: String) {
         val intent = Intent(this,GameActivity::class.java)
         intent.putExtra("title",title)
+        intent.putExtra("temaID",temaId)
         intent.putExtra("startColor",startColor)
         intent.putExtra("endColor",endColor)
         startActivity(intent)
