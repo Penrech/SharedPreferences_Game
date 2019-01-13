@@ -35,116 +35,272 @@ import com.google.firebase.database.ValueEventListener
 /**
 *
 * Aquí se instancian 3 interfaces que sirven para obtener información de eventos de diversas clases modelo
- *
- * Es la clase principal, se utiliza como lazo de unión entre la base de datos local en shared preferences y la
- * aplicación
+*
+* Es la clase principal, se utiliza como lazo de unión entre la base de datos local en shared preferences y la
+* aplicación
 *
 * */
 class HomeActivity : AppCompatActivity(),
-    /**
-     *
-     *
-     */
+
     UserData.SaveAndGetLocalUserData,
     TemaData.SaveOrGetListaTemas,
     PreguntasData.SaveAndGetListaPreguntas{
 
-
-
-
+    /**
+     *
+     * @param loadingScene Escena inicial, cuando la app está cargando
+     * @param homeScene Escena de la actividad home una vez cargada
+     *
+     */
     var loadingScene : Scene? = null
     var homeScene: Scene? = null
 
-    var transitionOnceLoaded: Transition? = null
+    /**
+     *
+     * Todos estos parámetros son para referenciar la app con la base de datos externa Firebase
+     * @param database es el la referencia principal con la base de datos
+     * @param conectionRef es la referencia con un objeto de la base de datos que informa sobre la conexión
+     * @param preguntasRef es la referencia con el bloque de preguntas guardado en la base de datos
+     * @param temasRef es la referencia con el bloque de temas guardado en la base de datos
+     * @param usuariosRef es la referencia con el bloque de usuarios guardado en la base de datos
+     *
+     * */
     var database : FirebaseDatabase? = null
     var conectionRef: DatabaseReference? = null
     var preguntasRef: DatabaseReference? = null
     var temasRef: DatabaseReference? = null
     var usuariosRef: DatabaseReference? = null
-    var dummyRef: DatabaseReference? = null
+
+    /**
+     *
+     * @param mainUILoaded es un booleano que indica si la UI de home ha sido cargada o si todavía está en
+     * la escena loadingScene
+     *
+     * */
     var mainUILoaded: Boolean = false
 
+    /**
+     *
+     * Objecto estático de la clase HomeActivity
+     *
+     * @param conectionState es un boleano donde se guarda el estado de la conexión de la app con su base de datos
+     * online : (true -> conectado) (false -> desconectada).
+     * False (desconectada) como valor inicial
+     *
+     * @param USER_DATA define un string que se utiliza como clave para los objetos de clase
+     * @see User en la base de datos local
+     *
+     * @param TEMAS_DATA define un string que se utiliza como clave para los objetos de clase
+     * @see TemasList en la base de datos local
+     *
+     * @param PREGUNTAS_DATA define un string que se utiliza como clave para los objetos de clase
+     * @see PreguntasTotal en la base de datos local
+     *
+     * @param userData almacena una instancia de la clase
+     * @see UserData en la que se almacenan los datos del usuario mientras la aplicación está corriendo
+     *
+     * @param temasData almacena una instancia de la clase
+     * @see TemaData en la que se almacenan los datos de los temas mientras la aplicación está corriendo
+     *
+     * @param preguntasData almacena una instancia de la clase
+     * @see PreguntasData en la que se almacenan los datos de los temas mientras la aplicación está corriendo
+     *
+     * @param sharedPreferences declara una variable de la clase SharedPreferences, para utilizarla como referencia
+     * con la base de datos SharedPreferences
+     *
+     * @param gson declara una variable de la clase de Google Gson, la cual permite hacer parse de Json en String y
+     * viceversa
+     *
+     * */
+    companion object {
+        var conectionState = false
+        val USER_DATA = "userData"
+        val TEMAS_DATA = "temasData"
+        val PREGUNTAS_DATA = "preguntasData"
+        var userData = UserData()
+        var temasData = TemaData()
+        var preguntasData = PreguntasData()
+        var sharedPreferences: SharedPreferences? = null
+        var gson : Gson? = null
+    }
 
     override fun onCreate(savedInstanceState: Bundle?) {
 
+        /**
+         *
+         * Se hereda la funcionalidad de la función onCreate
+         *
+         * Se establece como vista el documento xml R.layout.activity_home (activity_home.xml)
+         *
+         * */
         super.onCreate(savedInstanceState)
         setContentView(R.layout.activity_home)
 
+        /**
+         *
+         * Se inicializa la variable sharedPrefences, asociandola con la base de datos SharedPreferences
+         * @see sharedPreferences
+         *
+         * Se inicializa la variable gson con una instancia de la clase
+         * @see gson
+         * @see Gson
+         *
+         * */
         sharedPreferences = PreferenceManager.getDefaultSharedPreferences(this)
         gson = Gson()
+
+        /**
+         *
+         * Esto es un grupo de inicialización de las tres interfaces incorporadas en HomeActivity
+         *
+         * Dentro de cada clase hay declarada una interfaz en la que se declaran métodos para guardar datos
+         * @see UserData
+         * @see TemaData
+         * @see PreguntasData
+         *
+         * */
         userData.savingInterface = this as UserData.SaveAndGetLocalUserData
         temasData.savingInterface = this as TemaData.SaveOrGetListaTemas
         preguntasData.savingInterface = this as PreguntasData.SaveAndGetListaPreguntas
 
+        /**
+         *
+         * Se declara el color del fondo de la Activity HomeActivity de forma inicial en color blanco
+         *
+         * */
         rootHome.background = getDrawable(android.R.color.background_light)
 
+        /**
+         *
+         * Se inicializan las dos escenas :
+         * @see homeScene y
+         * @see loadingScene
+         * con sus correspondientes layouts y se establece LoadingScene como escena inicial
+         *
+         * */
         homeScene = Scene.getSceneForLayout(rootHome,R.layout.activity_home,this)
         loadingScene = Scene.getSceneForLayout(rootHome,R.layout.loading_home,this)
-
         loadingScene?.enter()
 
+        /**
+         *
+         * En este grupo se inicializan las variables y referencias con la base de datos online (Firebase)
+         *
+         * Se inicializa la variable
+         * @see database con una instancia de la clase
+         * @see FirebaseDatabase
+         *
+         * Se inicializan las siguientes variables con sus respectivas referencias en la base de datos
+         * @see conectionRef
+         * @see preguntasRef
+         * @see temasRef
+         * @see usuariosRef
+         *
+         * */
         database = FirebaseDatabase.getInstance()
-
         conectionRef = database?.getReference(".info/connected")
         preguntasRef = database?.getReference("preguntas")!!.child("ES_es")
         temasRef = database?.getReference("temas")!!.child("ES_es")
         usuariosRef = database?.getReference("usuarios")
-        dummyRef = database?.getReference("conection")
 
+        /**
+         *
+         * Se inicializan las tres variables que guardan datos extraidos de la base de datos local:
+         *
+         * @see userData con la función
+         * @sample getUserData que deriva a través de una interfaz de la función
+         * @see UserData.getLocalUserData
+         *
+         * @see temasData con la función
+         * @sample getListaTemas que deriva a través de una interfaz de la función
+         * @see TemaData.getLocalListaTemas
+         *
+         * @see preguntasData con la función
+         * @sample getPreguntas que deriva a través de una interfaz de la función
+         * @see PreguntasData.getLocalPreguntasData
+         *
+         * */
         userData.getLocalUserData()
         temasData.getLocalListaTemas()
         preguntasData.getLocalPreguntasData()
 
-        conectionRef!!.addValueEventListener(object : ValueEventListener {
-            override fun onDataChange(snapshot: DataSnapshot) {
-                val connected = snapshot.getValue(Boolean::class.java)!!
-                if (connected) {
-                    conectionState = connected
-
-                    Log.i("TAG","Conectado")
-                } else {
-                    conectionState = connected
-                    Log.i("TAG","No conectado")
-                }
-            }
-
-            override fun onCancelled(error: DatabaseError) {
-                Log.i("TAG","Error detectando conexion $error")
-            }
-        })
+        /**
+         *
+         * @param getConexionFromFirebase inicializa un listener para comprobar cuando hay o no hay conexión con la
+         * base de datos
+         * @sample getConexionFromFirebase
+         *
+         * @param getTemasFromFirebase hace una consulta con la base de datos para descargar los temas de esta
+         * @sample getTemasFromFirebase
+         *
+         * @param getPreguntasFromFirebase hace una consulta con la base de datos para descargar las preguntas de esta
+         * @sample getPreguntasFromFirebase
+         *
+         * @param saveUsuarioToFirebase actualiza de forma inicial la información del usuario en la base de datos local
+         * con la base de datos Firebase
+         * Se le pasa un parámetro de la clase [User] , que corresponde a los datos del usuario
+         * @sample saveUsuarioToFirebase
+         *
+         * @param setTimer inicializa una función que incorpora una cuenta atrás, esta determina cuanto hay que esperar
+         * antes de declarar que no hay conexión si la base de datos no responde en el tiempo en segundos pasado a través
+         * de un parámetro [Int]
+         * @sample setTimer
+         *
+         * */
+        getConexionFromFirebase()
         getTemasFromFirebase()
         getPreguntasFromFirebase()
         saveUsuarioToFirebase(userData.user)
         setTimer(2)
 
     }
-/*
-    fun comprobarConexion(): Boolean{
 
-        conectionRef?.addListenerForSingleValueEvent(object : ValueEventListener {
-            override fun onDataChange(snapshot: DataSnapshot) {
-                val connected = snapshot.getValue(Boolean::class.java)!!
-                if (connected) {
-                    Log.i("TAG","Conectado")
-                } else {
-                    Log.i("TAG","No conectado")
-                }
-
-            }
-
-            override fun onCancelled(error: DatabaseError) {
-                Log.i("TAG","Error detectando conexion $error")
-            }
-        })
-    }*/
-
+    /**
+     *
+     * Implementación de la función
+     * @see setTimer
+     * @property seconds segundos de espera antes de declarar la app sin conexión
+     *
+     * */
     fun setTimer(seconds: Int){
+        /**
+         *
+         * @param miliseconds convierte la
+         * @property seconds en milisegundos
+         *
+         * La instancia de la clase
+         * @see Handler iniciará una tarea
+         * @see Runnable al pasar el tiempo especificado por la
+         * @property seconds
+         *
+         * Seguidamente se comprueba si:
+         *
+         * @see conectionState es [true], si la conexión ya ha sido establecida
+         * si conectionState es [true] se comprueba si la interfaz principal
+         * @see mainUILoaded ha sido cargada o no
+         * Si no ha sido cargada se llama a la función
+         * @see checkInternetAndUser con su propiedad
+         * @property withInternet con el valor [true]
+         *
+         * @see conectionState es [false], si la conexión no  ha sido establecida
+         * si conectionState es [false] se llama a la función
+         * @see checkInternetAndUser con su propiedad
+         * @property withInternet con el valor [false]
+         *
+         * */
         val miliseconds = (seconds * 1000).toLong()
         Handler().postDelayed(
             {
                 if (conectionState){
                     if (!mainUILoaded)
-                    checkInternetAndUser(true)
+                        /**
+                         *
+                         * @see checkInternetAndUser comprueba si en la base de datos local hay ya un usuario
+                         * registrado y realiza o no una determinada tarea si hay o no conexión
+                         * @sample checkInternetAndUser
+                         *
+                         * */
+                        checkInternetAndUser(true)
                 }
                 else{
                     checkInternetAndUser(false)
@@ -154,63 +310,219 @@ class HomeActivity : AppCompatActivity(),
         )
     }
 
+    /**
+     *
+     * @see getConexionFromFirebase no tiene propiedad de entrada, añade un listener que escucha si la base de datos
+     * Firebase está conectada o no. Info: Si la aplicación no guarda ni lee nada de esta base de datos en 60 segundos
+     * esta se desconecta del cliente para ahorrar bateria. Se conecta de nuevo automaticamente cuando la aplicación
+     * lo requiera, siempre que halla conexión a internet
+     *
+     * */
+    fun getConexionFromFirebase(){
+        /**
+         *
+         * El listener se le añade a la referencia
+         * @see conectionRef
+         * Cuando hay un cambio de conexión, se actualiza el parámetro
+         * @see conectionState en consecuencia
+         *
+         * */
+        conectionRef!!.addValueEventListener(object : ValueEventListener {
+            override fun onDataChange(snapshot: DataSnapshot) {
+                val connected = snapshot.getValue(Boolean::class.java)!!
+                if (connected) {
+                    conectionState = connected
+                    Log.i("CONECTION","Conectado")
+                } else {
+                    conectionState = connected
+                    Log.i("CONECTION","No conectado")
+                }
+            }
 
+            override fun onCancelled(error: DatabaseError) {
+                Log.i("CONECTION","Error detectando conexion ${error.toException()}")
+            }
+        })
+    }
+
+    /**
+     *
+     * @see getTemasFromFirebase no tiene propieda de entrada, descarga una única vez por instancia(no de forma continuada)
+     * los temas disponibles en la base de datos Firebase
+     *
+     * */
     fun getTemasFromFirebase(){
 
-        // Read from the database
+        /**
+         *
+         * Se obtienen entos datos a través de la referencia
+         * @see temasRef
+         *
+         * */
         temasRef!!.addListenerForSingleValueEvent(object : ValueEventListener {
             override fun onDataChange(dataSnapshot: DataSnapshot) {
+
+                /**
+                 *
+                 * Se crea una variable
+                 * @param temasList de la clase
+                 * @see TemasList en la que se irán almacenando todos los temas
+                 * Se añaden a través de un loop temas de la clase
+                 * @see Tema
+                 *
+                 * Se guardan estos temas en la variable
+                 * @see temasData con la función
+                 * @see TemaData.addUpdateTemas pasandole como parámetro la variable
+                 * @see temasList
+                 *
+                 * Se guardan estos temas como parte de los datos del usuario en la variable
+                 * @see userData con la función
+                 * @see UserData.ActualizarTemas pasandole como parámetro la variable
+                 * @see temasList
+                 *
+                 * */
                 val temasList = TemasList()
-                Log.i("FIREBASE","Numero de hijos temas: ${dataSnapshot.childrenCount}")
+
                 for ( i in dataSnapshot.children){
                     temasList.temas.add(i.getValue(Tema::class.java)!!)
                 }
+
                 temasData.addUpdateTemas(temasList)
                 userData.ActualizarTemas(temasList)
-                //retriveTemas()
-
             }
+
             override fun onCancelled(error: DatabaseError) {
                 Toast.makeText(this@HomeActivity,getString(R.string.error_conexion),Toast.LENGTH_LONG).show()
-                // Failed to read value
-                Log.i("TAG", "Failed to read value.", error.toException())
+
+                Log.i("CONECTION","Error de conexión obteniedo temas ${error.toException()}")
             }
         })
 
     }
 
+    /**
+     *
+     * @see getPreguntasFromFirebase no tiene propieda de entrada, descarga una única vez por instancia(no de forma continuada)
+     * las prguntas disponibles en la base de datos Firebase
+     *
+     * */
     fun getPreguntasFromFirebase(){
-        // Read from the database
+
+        /**
+         *
+         * Se obtienen estos datos a través de la referencia
+         * @see preguntasRef
+         *
+         * */
         preguntasRef!!.addListenerForSingleValueEvent(object : ValueEventListener {
             override fun onDataChange(dataSnapshot: DataSnapshot) {
+
+                /**
+                 *
+                 * Se crea una variable
+                 * @param preguntasList de la clase
+                 * @see PreguntasTotal en la que se irán almacenando todas las preguntas
+                 * Se añaden a través de un loop preguntas de la clase
+                 * @see PreguntasDificultad
+                 *
+                 * Se guardan estas preguntas en la variable
+                 * @see preguntasData con la función
+                 * @see PreguntasData.addUpdatePreguntas pasandole como parámetro la variable
+                 * @see preguntasList
+                 *
+                 * Una vez cargados estos datos (suelen ser los de mayor volumen) se da por hecho que todos los datos
+                 * de la base de datos han sido descargados.
+                 * Se comprueba si la interfaz de Home referente a la escena
+                 * @see homeScene ha sido cargada, comprobando el parámetro
+                 * @see mainUILoaded
+                 *
+                 * Si mainUILoaded tiene como valor [false] (no ha sido cargada) se llama a la función
+                 * @see checkInternetAndUser con el valor [true] (si hay internet) y comprueba si en la base de datos
+                 * local hay ya un usuario registrado y realiza o no una determinada tarea si hay o no conexión
+                 * @sample checkInternetAndUser
+                 *
+                 * */
                 val preguntasList = PreguntasTotal()
-                    Log.i("FIREBASE","Numero de hijos preguntas: ${dataSnapshot.childrenCount}")
+
                 for (i in dataSnapshot.children){
-                    Log.i("FIREBASE","Clave : ${i.key} , Valor : ${i.value}")
                     preguntasList.totalPreguntas.add(i.getValue(PreguntasDificultad::class.java)!!)
                 }
+
                 preguntasData.addUpdatePreguntas(preguntasList)
-                retrivePreguntas()
                 if (!mainUILoaded)
                     checkInternetAndUser(true)
 
             }
             override fun onCancelled(error: DatabaseError) {
                 Toast.makeText(this@HomeActivity,getString(R.string.error_conexion),Toast.LENGTH_LONG).show()
-                // Failed to read value
-                Log.i("TAG", "Failed to read value.", error.toException())
+
+                Log.i("CONECTION","Error de conexión obteniedo preguntas ${error.toException()}")
             }
         })
     }
 
+    /**
+     *
+     * @see saveUsuarioToFirebase añade un usuario a la base de datos Firebase
+     * toma como propiedad
+     * @property user que es de la clase
+     * @see User
+     *
+     * */
     fun saveUsuarioToFirebase(user: User){
+
+        /**
+         *
+         * Comprueba si el id guardado en
+         * @see User.uid es diferente de null. Si este valor es null significa que no hay ningún usuario registrado
+         * actualmente en la base de datos local de la aplicación
+         *
+         * Si no es null se procede a guardar los datos del usuario de la base de datos local en la base de datos Firebase
+         * para ello se utiliza la referencia de usuarios con la base de datos Firebase
+         * @see usuariosRef
+         * y se le añade el valor
+         * @property user
+         *
+         * */
         if (user.uid != null){
             usuariosRef?.child(user.uid!!)?.setValue(user)
         }
     }
 
+    /**
+     *
+     * @see checkInternetAndUser comprueba básicamente si hay o no hay ya un usuario registrado en la base de datos
+     * local de la app en el dispositivo. Además informa al usuario si hay o no conexión
+     * Recibe como parámetro la propiedad
+     * @property withInternet que indica si hay conexión [true] o si no [false]
+     *
+     * */
     fun checkInternetAndUser(withInternet: Boolean){
 
+        /**
+         *
+         * Se comprueba si hay un usuario registrado en la base de datos local mirando la variable que guarda los
+         * datos de usuario obtenidos de la base de datos local
+         * @see userData , concretamente se comprueba si el parámetro uid de la instacia de su clase
+         * @see User.uid es null
+         *
+         * Si es null, se llama a la función
+         * @see loadRegisterActivity que se encarga de cargar la activity de la clase
+         * @see RegisterActivity con el fin de que el usuario se registre en la base de datos local
+         *
+         * Si no es null, se llama a la función
+         * @see loadHomeUi que se encarga de cargar la interfaz de la activity
+         * @see HomeActivity en su escena
+         * @see homeScene
+         *
+         * See comprueba la propiedad
+         * @property withInternet para ver si hay internet o no
+         * si no hay internet, si el valor de esta propiedad es [false] se muestra al usuario un
+         * @see Toast informandole de este estado
+         *
+         *
+         *
+         * */
        if (userData.user.uid.isNullOrEmpty()){
             loadRegisterActivity()
         }
@@ -240,6 +552,18 @@ class HomeActivity : AppCompatActivity(),
          * */
         supportActionBar?.setDisplayShowTitleEnabled(false)
 
+    }
+
+    /**
+     *
+     * Esta función se usa simplemente para abrir la actividad perfil a través de un intent sin animaciones
+     *
+     * */
+    fun showProfile(){
+        val intent = Intent(this,ProfileActivity::class.java)
+        startActivity(intent)
+        //overridePendingTransition(0,0)
+        overridePendingTransition(R.anim.slide_from_right,R.anim.slide_to_left)
     }
 
     fun loadRegisterActivity(){
@@ -308,90 +632,8 @@ class HomeActivity : AppCompatActivity(),
         }
     }
 
-/*
-    fun addTemas(){
-        var temas: MutableList<Tema> = mutableListOf()
-        temas.add(Tema("Geografía","geografia","#80CBC4","#00BFA5"))
-        temas.add(Tema("Tecnología","tecnologia","#81D4FA","#0091EA"))
-        temas.add(Tema("Animales","animales","#FFCC80","#FF6D00"))
-        userData.ActualizarTemas(temas)
-        retriveTemas()
-    }
-*/
 
-    fun actualizarPuntuacion(view: View){
-        userData.changeThemeScore(5,1,"geografia")
-    }
-/*
-    fun actualizarTemas(view: View){
-        var temas: TemasList = TemasList()
-        temas.temas.add(Tema("Geografía","geografia","#80CBC4","#00BFA5"))
-        temas.temas.add(Tema("Tecnología","tecnologia","#81D4FA","#0091EA"))
-        temas.temas.add(Tema("Animales","animales","#FFCC80","#FF6D00"))
-        userData.ActualizarTemas(temas)
-        temasData.addUpdateTemas(temas)
-        retriveTemas()
-    }*/
 
-    fun retriveTemas(){
-        userData.user.temas[User.DificultadEnum.FACIL.value].forEach {themeScore ->
-            Log.i("TAG","Temas faciles: ${themeScore.name} , dificultad: ${themeScore.dificultadid}")
-        }
-        userData.user.temas[User.DificultadEnum.MEDIO.value].forEach {themeScore ->
-            Log.i("TAG","Temas medios: ${themeScore.name}, dificultad: ${themeScore.dificultadid}")
-        }
-        userData.user.temas[User.DificultadEnum.DIFICIL.value].forEach {themeScore ->
-            Log.i("TAG","Temas dificiles: ${themeScore.name} , dificultad: ${themeScore.dificultadid}")
-        }
-        Log.i("TAG","Lista de temas: ")
-        temasData.lista.temas.forEach {
-            Log.i("TAG","Tema ${it.name}")
-        }
-    }
-    fun retrivePreguntas(){
-        preguntasData.listaPreguntasTotal.totalPreguntas[0].temas.forEach {
-            Log.i("PREGUNTAS","Preguntas de ${it.name}")
-            it.preguntas.forEach {
-                Log.i("PREGUNTAS",it.respuesta_correcta)
-            }
-        }
-    }
-    /*
-    fun retriveTemas(){
-        userData.user.temas.facil.forEach {
-            Log.i("TAG","Temas faciles: ${it.name}")
-        }
-        userData.user.temas.medio.forEach {
-            Log.i("TAG","Temas medios: ${it.name}")
-        }
-        userData.user.temas.medio.forEach {
-            Log.i("TAG","Temas dificiles: ${it.name}")
-        }
-    }*/
-
-    /**
-     *
-     * Esta función se usa simplemente para abrir la actividad perfil a través de un intent sin animaciones
-     *
-     * */
-    fun showProfile(){
-        val intent = Intent(this,ProfileActivity::class.java)
-        startActivity(intent)
-        //overridePendingTransition(0,0)
-        overridePendingTransition(R.anim.slide_from_right,R.anim.slide_to_left)
-    }
-
-    companion object {
-        var conectionState = false
-        val USER_DATA = "userData"
-        val TEMAS_DATA = "temasData"
-        val PREGUNTAS_DATA = "preguntasData"
-        var userData = UserData()
-        var temasData = TemaData()
-        var preguntasData = PreguntasData()
-        var sharedPreferences: SharedPreferences? = null
-        var gson : Gson? = null
-    }
 
     override fun saveUserData(user: User) {
         val prefsEditor = sharedPreferences?.edit()
