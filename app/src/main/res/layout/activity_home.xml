@@ -7,7 +7,8 @@
         android:layout_height="match_parent"
         tools:context=".HomeActivity"
         android:background="@drawable/gradient_background"
-        android:fitsSystemWindows="true" android:id="@+id/rootHome">
+        android:fitsSystemWindows="true"
+        android:id="@+id/rootHome">
 
     <android.support.design.widget.AppBarLayout
             android:layout_height="wrap_content"
@@ -24,7 +25,6 @@
 
     </android.support.design.widget.AppBarLayout>
 
-    <include
-            layout="@layout/content_home"/>
+    <include layout="@layout/content_home"/>
 
 </android.support.design.widget.CoordinatorLayout>

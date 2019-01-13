@@ -11,7 +11,8 @@
             android:theme="@style/AppTheme">
         <activity
                 android:name=".HomeActivity"
-                android:theme="@style/AppTheme.NoActionBar.InvisibleWhiteText">
+                android:theme="@style/AppTheme.NoActionBar.InvisibleWhiteText"
+                android:screenOrientation="portrait">
             <intent-filter>
                 <action android:name="android.intent.action.MAIN"/>
 
@@ -26,20 +27,23 @@
         <activity
                 android:name=".ProfileActivity"
                 android:label="@string/profile_activity_label"
-                android:theme="@style/AppTheme.NoActionBar.InvisibleWhiteText">
+                android:theme="@style/AppTheme.NoActionBar.InvisibleWhiteText"
+                android:screenOrientation="portrait">
         </activity>
         <activity
                 android:name=".RegisterActivity"
-                android:theme="@style/AppTheme.NoActionBar.InvisibleWhiteText">
+                android:theme="@style/AppTheme.NoActionBar.InvisibleWhiteText"
+                android:screenOrientation="portrait">
         </activity>
         <activity
                 android:name=".SelectionActivity"
-                android:exported="true"
-                android:theme="@style/AppTheme.NoActionBar.InvisibleWhiteText">
+                android:theme="@style/AppTheme.NoActionBar.InvisibleWhiteText"
+                android:screenOrientation="portrait">
         </activity>
         <activity
                 android:name=".GameActivity"
-                android:theme="@style/AppTheme.NoActionBar.InvisibleWhiteText">
+                android:theme="@style/AppTheme.NoActionBar.InvisibleWhiteText"
+                android:screenOrientation="portrait">
         </activity>
     </application>
 

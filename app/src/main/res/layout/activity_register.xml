@@ -7,6 +7,7 @@
         xmlns:app="http://schemas.android.com/apk/res-auto"
         android:fitsSystemWindows="true"
         android:id="@+id/rootRegister">
+
     <android.support.constraint.ConstraintLayout
             android:layout_width="match_parent"
             android:layout_height="match_parent"
@@ -15,7 +16,7 @@
             android:background="@drawable/gradient_background">
 
         <TextView
-                android:text="Introduce un Nickname"
+                android:text="@string/profile_text_introduce_nickname"
                 android:layout_width="0dp"
                 android:layout_height="wrap_content"
                 android:id="@+id/titulo_register"
@@ -75,8 +76,7 @@
                         app:layout_constraintBottom_toBottomOf="@+id/registerNicknameIcon"
                         android:layout_marginEnd="24dp"
                         app:layout_constraintEnd_toEndOf="parent"
-                        app:layout_constraintHorizontal_bias="0.0"
-                />
+                        app:layout_constraintHorizontal_bias="0.0"/>
                 <TextView
                         android:text="Error"
                         android:layout_width="0dp"
@@ -109,7 +109,7 @@
 
         </android.support.v7.widget.CardView>
         <Button
-                android:text="Registrarse"
+                android:text="@string/register_button_text"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 app:layout_constraintStart_toStartOf="parent"
@@ -132,18 +132,21 @@
                 app:layout_constraintHorizontal_bias="0.5"
                 app:layout_constraintTop_toBottomOf="@+id/registerDataCardView"
                 android:layout_marginTop="48dp"
-                android:onClick="registrarse" android:visibility="visible"/>
+                android:onClick="registrarse"
+                android:visibility="visible"/>
         <ProgressBar
                 android:theme="@style/customSpinner"
                 style="@style/customSpinner"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 app:layout_constraintStart_toStartOf="parent"
-                app:layout_constraintEnd_toEndOf="parent" android:id="@+id/registerSpinner"
+                app:layout_constraintEnd_toEndOf="parent"
+                android:id="@+id/registerSpinner"
                 android:layout_marginStart="32dp"
                 android:layout_marginEnd="32dp"
                 android:layout_marginBottom="8dp"
                 app:layout_constraintBottom_toBottomOf="@+id/registerBtn"
-                app:layout_constraintTop_toTopOf="@+id/registerBtn" android:visibility="gone"/>
+                app:layout_constraintTop_toTopOf="@+id/registerBtn"
+                android:visibility="gone"/>
     </android.support.constraint.ConstraintLayout>
 </android.support.design.widget.CoordinatorLayout>

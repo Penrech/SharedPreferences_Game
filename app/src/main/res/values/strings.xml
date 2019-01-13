@@ -42,4 +42,6 @@
     <string name="counter_start_game">Adelante!</string>
     <string name="error_loading_gestures">Error cargando datos de juego</string>
     <string name="development_not_implemented">No implementado</string>
+    <string name="profile_text_introduce_nickname">Introduce un Nickname</string>
+    <string name="register_button_text">Registrarse</string>
 </resources>

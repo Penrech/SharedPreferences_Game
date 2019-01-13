@@ -13,7 +13,7 @@ import android.support.transition.Transition
 import android.support.transition.TransitionInflater
 import android.support.transition.TransitionManager
 
-import android.support.v7.app.AppCompatActivity;
+import android.support.v7.app.AppCompatActivity
 import android.util.Log
 import android.view.Menu
 import android.view.MenuItem
@@ -32,16 +32,15 @@ import com.google.firebase.database.DataSnapshot
 import com.google.firebase.database.ValueEventListener
 
 
-/**
-*
-* Aquí se instancian 3 interfaces que sirven para obtener información de eventos de diversas clases modelo
-*
-* Es la clase principal, se utiliza como lazo de unión entre la base de datos local en shared preferences y la
-* aplicación
-*
-* */
 class HomeActivity : AppCompatActivity(),
-
+    /**
+     *
+     * Aquí se instancian 3 interfaces que sirven para obtener información de eventos de diversas clases modelo
+     *
+     * Es la clase principal, se utiliza como lazo de unión entre la base de datos local en shared preferences y la
+     * aplicación
+     *
+     * */
     UserData.SaveAndGetLocalUserData,
     TemaData.SaveOrGetListaTemas,
     PreguntasData.SaveAndGetListaPreguntas{
@@ -52,8 +51,8 @@ class HomeActivity : AppCompatActivity(),
      * @param homeScene Escena de la actividad home una vez cargada
      *
      */
-    var loadingScene : Scene? = null
-    var homeScene: Scene? = null
+    private var loadingScene : Scene? = null
+    private var homeScene: Scene? = null
 
     /**
      *
@@ -65,11 +64,11 @@ class HomeActivity : AppCompatActivity(),
      * @param usuariosRef es la referencia con el bloque de usuarios guardado en la base de datos
      *
      * */
-    var database : FirebaseDatabase? = null
-    var conectionRef: DatabaseReference? = null
-    var preguntasRef: DatabaseReference? = null
-    var temasRef: DatabaseReference? = null
-    var usuariosRef: DatabaseReference? = null
+    private var database : FirebaseDatabase? = null
+    private var conectionRef: DatabaseReference? = null
+    private var preguntasRef: DatabaseReference? = null
+    private var temasRef: DatabaseReference? = null
+    private var usuariosRef: DatabaseReference? = null
 
     /**
      *
@@ -80,7 +79,7 @@ class HomeActivity : AppCompatActivity(),
     var mainUILoaded: Boolean = false
 
     /**
-     *
+     * Grupo de variables estáticas de la clase
      * Objecto estático de la clase HomeActivity
      *
      * @param conectionState es un boleano donde se guarda el estado de la conexión de la app con su base de datos
@@ -165,7 +164,8 @@ class HomeActivity : AppCompatActivity(),
 
         /**
          *
-         * Se declara el color del fondo de la Activity HomeActivity de forma inicial en color blanco
+         * Se declara el color del fondo de la Activity HomeActivity
+         * @see rootHome.backgorund de forma inicial en color blanco
          *
          * */
         rootHome.background = getDrawable(android.R.color.background_light)
@@ -262,7 +262,7 @@ class HomeActivity : AppCompatActivity(),
      * @property seconds segundos de espera antes de declarar la app sin conexión
      *
      * */
-    fun setTimer(seconds: Int){
+    private fun setTimer(seconds: Int){
         /**
          *
          * @param miliseconds convierte la
@@ -318,7 +318,7 @@ class HomeActivity : AppCompatActivity(),
      * lo requiera, siempre que halla conexión a internet
      *
      * */
-    fun getConexionFromFirebase(){
+    private fun getConexionFromFirebase(){
         /**
          *
          * El listener se le añade a la referencia
@@ -351,7 +351,7 @@ class HomeActivity : AppCompatActivity(),
      * los temas disponibles en la base de datos Firebase
      *
      * */
-    fun getTemasFromFirebase(){
+    private fun getTemasFromFirebase(){
 
         /**
          *
@@ -406,7 +406,7 @@ class HomeActivity : AppCompatActivity(),
      * las prguntas disponibles en la base de datos Firebase
      *
      * */
-    fun getPreguntasFromFirebase(){
+    private fun getPreguntasFromFirebase(){
 
         /**
          *
@@ -469,7 +469,7 @@ class HomeActivity : AppCompatActivity(),
      * @see User
      *
      * */
-    fun saveUsuarioToFirebase(user: User){
+    private fun saveUsuarioToFirebase(user: User){
 
         /**
          *
@@ -520,15 +520,24 @@ class HomeActivity : AppCompatActivity(),
          * si no hay internet, si el valor de esta propiedad es [false] se muestra al usuario un
          * @see Toast informandole de este estado
          *
-         *
+         * Finalmente se establece la variable
+         * @see mainUILoaded como [true] es decir, se indica que la aplicación ha cargado ya sus datos o ha saltado
+         * el timeout de conexión. De todos modos indica que la pantalla home ya tiene su interfaz representada por
+         * la escena
+         * @see homeScene cargada
+         * El valor de
+         * @see mainUILoaded evita que si la aplicación se inicia sin internet y salta el timeout de
+         * @see setTimer luego al recuperar internet las funcion
+         * @see getPreguntasFromFirebase no vuelva a intentar cargar la pantalla principal de la app, con lo que eso
+         * conllevaría
          *
          * */
-       if (userData.user.uid.isNullOrEmpty()){
+        if (userData.user.uid.isNullOrEmpty()){
             loadRegisterActivity()
         }
         else{
            loadHomeUi()
-       }
+        }
 
         if (!withInternet){
             Toast.makeText(this,getString(R.string.error_no_conection_no_data),Toast.LENGTH_LONG).show()
@@ -537,48 +546,152 @@ class HomeActivity : AppCompatActivity(),
         mainUILoaded = true
     }
 
-    fun loadHomeUi(){
-        Log.i("TAG","printo la home")
+    /**
+     *
+     * @see loadHomeUi se encarga de cambiar de la escena inicial
+     * @see loadingScene a la escena standar de la activity home
+     * @see homeScene
+     *
+     * */
+    private fun loadHomeUi(){
+
+        /**
+         *
+         * Se cambia el color del fondo de
+         * @see rootHome para que sea un gradiente definido en
+         * @see R.drawable.gradient_background
+         *
+         * El parámetro
+         * @param transition es de la clase
+         * @see Transition he inicializa una transición con el xml
+         * @see R.transition.no_transition
+         * Seguidamente se define la duración de la transición con el valor 0, es decir, transición sin animación
+         * Esto es así, porque la transición en si tiene un pequeño fadeout que se puede mostrar o no eliminado la
+         * definicion de la duración comentada
+         * Seguidamente se pasa de la escena
+         * @see loadingScene a la escena
+         * @see homeScene
+         *
+         * Se establece como barra de acción de la activity la definida en
+         * @see home_toolbar
+         *
+         * Se modifica el textView
+         * @see homeHighScore
+         * encargado de mostrar la puntuación del usuario para mostrar la puntuación obtenida
+         * de la base de datos local, previamente guardaada en la variable
+         * @see userData en su instancia del objeto
+         * @see User.puntuacion
+         *
+         * Finalmente se evita que se muestre el título en la barra de acción llamando al método
+         * @see getSupportActionBar.setDisplayShowTitleEnabled y pasandole el valor [false]
+         *
+         * */
         rootHome.background = getDrawable(R.drawable.gradient_background)
+
         val transition = TransitionInflater.from(this).inflateTransition(R.transition.no_transition)
         transition.duration = 0
         TransitionManager.go(homeScene!!,transition)
+
         setSupportActionBar(home_toolbar)
         homeHighScore.text = "${userData.user.puntuacion}"
-        /**
-         *
-         * Evito que se vea el titulo del activity
-         *
-         * */
+
         supportActionBar?.setDisplayShowTitleEnabled(false)
 
     }
 
     /**
      *
-     * Esta función se usa simplemente para abrir la actividad perfil a través de un intent sin animaciones
+     * @see showProfile abre la activity del perfil
+     * @see ProfileActivity
      *
      * */
-    fun showProfile(){
+    private fun showProfile(){
+
+        /**
+         *
+         * Se utiliza un
+         * @see Intent y el metodo
+         * @see startActivity para abrir la nueva activity
+         *
+         * Se utiliza
+         * @see overridePendingTransition para cambiar la transición entre activities por defecto
+         *
+         * */
         val intent = Intent(this,ProfileActivity::class.java)
         startActivity(intent)
-        //overridePendingTransition(0,0)
+
         overridePendingTransition(R.anim.slide_from_right,R.anim.slide_to_left)
     }
 
-    fun loadRegisterActivity(){
+    /**
+     *
+     * @see loadRegisterActivity abre la actividad de registro
+     * @see RegisterActivity
+     *
+     * */
+    private fun loadRegisterActivity(){
+
+        /**
+         *
+         * Se utiliza un
+         * @see Intent y el método
+         * @see startActivityForResult ya que se espera un dato de respuesta de esta activity
+         * @return el nickname elegido en la activy LoadRegisterActivity
+         *
+         * */
         val intent = Intent(this,RegisterActivity::class.java)
         startActivityForResult(intent,21)
     }
 
+    /**
+     *
+     * @see loadGameSelectionActivity se abre la activity de seleccion de temas
+     * se le pasa como propiedad una vista
+     * @property view , esto es así porque esta asociado al método onClick del botón jugar
+     * @see playBtn
+     *
+     * */
     fun loadGameSelectionActivity(view: View){
 
+        /**
+         *
+         * Se comprueba si la lista de temas de la base de datos local está vacia, esta se guarda en la variable
+         * @see temasData.lista.temas de la clase
+         * @see TemasList.temas
+         *
+         * Si esta vacía se muestra información al usuario impidiendo iniciar una partida. Esto se realiza a través
+         * de un snackBar. Este snackbar tiene una acción que permite reiniciar la aplicación para intentar resolver
+         * el problema.
+         * @param snack implementa un snackBar con el mensaje de que no hay datos
+         * @see Snackbar
+         *
+         * Seguidamente se cambia el aspecto estético del snackbar, cambiandole el color de fondo y el color del
+         * texto que este muestra.
+         * Se cambia también el color del botón acción del mismo.
+         * En este botón acción se implementa la acción asociada al parámetro
+         * @param i
+         * Esta junto a
+         * @see startActivity sirven para reiniciar la aplicación
+         *
+         * Finalmente se muestra el snackbar a traves del metodo show()
+         * @see Snackbar.show
+         *
+         *
+         * Si la lista no está vacia se accede a la activy
+         * @see SelectionActivity a través del parametro
+         * @param intent y el método
+         * @see startActivity
+         *
+         * */
         if (temasData.lista.temas.isEmpty()){
-            var snack = Snackbar.make(rootHome,getString(R.string.error_no_game_data),Snackbar.LENGTH_LONG)
-            var snackbarView = snack.view
+            val snack = Snackbar.make(rootHome,getString(R.string.error_no_game_data),Snackbar.LENGTH_LONG)
+
+            val snackbarView = snack.view
             snackbarView.setBackgroundColor(getColor(R.color.colorPrimary))
-            var snackTextView = snackbarView.findViewById<TextView>(android.support.design.R.id.snackbar_text)
+
+            val snackTextView = snackbarView.findViewById<TextView>(android.support.design.R.id.snackbar_text)
             snackTextView.setTextColor(getColor(android.R.color.background_light))
+
             snack.setActionTextColor(getColor(android.R.color.background_light))
             snack.setAction(getString(R.string.error_restart_app)) {
                 val i = baseContext.packageManager
@@ -594,8 +707,35 @@ class HomeActivity : AppCompatActivity(),
         }
     }
 
+    /**
+     *
+     * @see onActivityResult se sobrescribe el método, de este modo se recibirá la información de vuelta de la
+     * activity
+     * @see RegisterActivity , el nickname introducido por el usuario asi como su uid
+     * @see Activity.onActivityResult
+     * Recibe como parámetros
+     * @property resultCode es el código enviado por el intent que abrió RegisterActivity y que esta envia de vuelta
+     * @property resultCode es el código que indica el estado del renvio de datos
+     * @property data son los datos que vienen de vuelta de RegisterActivity
+     *
+     * */
     override fun onActivityResult(requestCode: Int, resultCode: Int, data: Intent?) {
 
+        /**
+         *
+         * Se comprueba si
+         * @property requestCode es el mismo que el enviado por RegisterActivity
+         * @property resultCode es el mismo que el enviado por RegisterActivity
+         *
+         * Si es asi se actualizan los datos del usuario referenciados en
+         * @see userData con los métodos:
+         * @see UserData.changeNickname para introducir el nombre del usuario
+         * @see UserData.setUid para introducir la id unica del usuario recibida del servidor en RegisterActivity
+         *
+         * Seguidamente se llama al método
+         * @see loadHomeUi
+         *
+         * */
         if (requestCode == 21 && resultCode == Activity.RESULT_OK){
             userData.changeNickname(data?.getStringExtra("nickname")!!)
             userData.setUid(data.getStringExtra("uid"))
@@ -605,16 +745,59 @@ class HomeActivity : AppCompatActivity(),
         super.onActivityResult(requestCode, resultCode, data)
     }
 
+    /**
+     *
+     * @see onCreateOptionsMenu sobrescribe el método
+     * @see Activity.onCreateOptionsMenu y crea el menu de la barra de acción de la activity HomeActivity
+     * Se pasa como parámetro la referencia al menu
+     * @property menu
+     *
+     * */
     override fun onCreateOptionsMenu(menu: Menu): Boolean {
-        // Inflate the menu; this adds items to the action bar if it is present.
+
+        /**
+         *
+         * @see getMenuInflater permite cargar el menu
+         * @see R.menu.menu_home en el menu de la activity
+         *
+         * Para ello se utiliza el metodo
+         * @see getMenuInflater.inflate al que se le pasa el layout del menu la property
+         * @property menu
+         *
+         * */
         menuInflater.inflate(R.menu.menu_home, menu)
         return true
     }
 
+    /**
+     *
+     * @see onOptionsItemSelected sobrescribe el método
+     * @see Activity.onOptionsItemSelected y gestiona las acciones realizadas por cada uno de los elementos del menu
+     * Se pasa como parámetro de la referencia del objeto del menu seleccionado
+     * @property item
+     *
+     * */
     override fun onOptionsItemSelected(item: MenuItem): Boolean {
-        // Handle action bar item clicks here. The action bar will
-        // automatically handle clicks on the Home/Up button, so long
-        // as you specify a parent activity in AndroidManifest.xml.
+
+        /**
+         *
+         * De acuerdo con la documentación oficial:
+         * Handle action bar item clicks here. The action bar will
+         * automatically handle clicks on the Home/Up button, so long
+         * as you specify a parent activity in AndroidManifest.xml.
+         *
+         * El elemento when gestiona que elemento ha sido apretado y que acción realizar
+         * Por el momento solo está implementado la accion de acceder al perfil asociada con
+         * @see R.id.action_profile
+         *
+         * Esta llama al método
+         * @see showProfile para mostrar la activity
+         * @see ProfileActivity
+         *
+         * Las demás acciones no están implementadas y muestran un
+         * @see Toast indicando dicho estado
+         *
+         * */
         return when (item.itemId) {
             R.id.action_profile -> {
                 showProfile()
@@ -632,10 +815,36 @@ class HomeActivity : AppCompatActivity(),
         }
     }
 
-
-
-
+    /**
+     *
+     * @see saveUserData implementa el método de la interfaz
+     * @see UserData.savingInterface.saveUserData Sirve para guardar información del usuario en sharedPreferences
+     * Recibe el parámetro
+     * @property user que es de la clase
+     * @see User
+     *
+     * */
     override fun saveUserData(user: User) {
+
+        /**
+         *
+         * @param prefsEditor utiliza la referencia
+         * @see sharedPreferences y permite la edición de sharedPreferences
+         *
+         * @param json utiliza la referencia
+         * @see gson de la clase
+         * @see Gson para convertir los datos de
+         * @property user en Json
+         *
+         * Seguidamente se introducen estos datos en shared preferences a través de
+         * @param prefsEditor con el identificador
+         * @see USER_DATA
+         *
+         * Finalmente se llama al método
+         * @see saveUsuarioToFirebase con el parámetro
+         * @property user para guardar estos datos en la web Firebase
+         *
+         * */
         val prefsEditor = sharedPreferences?.edit()
         val json = gson?.toJson(user)
         prefsEditor?.putString(USER_DATA,json)
@@ -643,39 +852,180 @@ class HomeActivity : AppCompatActivity(),
         saveUsuarioToFirebase(user)
     }
 
+    /**
+     *
+     * @see updateMainPuntuacionTextView implementa el método de la interfaz
+     * @see UserData.savingInterface.updateMainPuntuacionTextView
+     * Se pasa como parámetro
+     * @property puntuacion
+     *
+     * */
     override fun updateMainPuntuacionTextView(puntuacion: Int) {
+
+        /**
+         *
+         * Se utiliza la nueva puntuación del usuario obtenida a partir de
+         * @property puntuacion y se añade al texto del textView
+         * @see homeHighScore
+         *
+         * */
         homeHighScore.text = "$puntuacion"
     }
 
+    /**
+     *
+     * @see getUserData sirve para obtener información del usuario de sharedPreferences
+     *
+     * */
     override fun getUserData() {
+
+        /**
+         *
+         * Se comprueba si sharedPreferences contiene información de usuario a través de la referencia
+         * @see sharedPreferences utilizando el método
+         * @see SharedPreferences.contains con la clave
+         * @see USER_DATA
+         *
+         * Si esto es [true] se crea la variable
+         * @param json con la que se lee la información a través de la clave anterior
+         * @see SharedPreferences.getString con la clave
+         * @see UserData
+         *
+         * Esa información se guarda en la variable que almacena los datos del usuario
+         * @see userData.user utilizando la variable
+         * @see gson con su método
+         * @see Gson.fromJson con la variable json y la clase
+         * @see User como parámetros
+         *
+         * */
         if (sharedPreferences!!.contains(USER_DATA)){
             val json = sharedPreferences?.getString(USER_DATA,"")
             userData.user = gson!!.fromJson(json,User::class.java)
         }
     }
 
+    /**
+     *
+     * @see saveListaTemas implementa el método de la interfaz
+     * @see TemaData.savingInterface.saveUserData Sirve para guardar información de los temas en sharedPreferences
+     * Recibe el parámetro
+     * @property temas que es de la clase
+     * @see TemasList
+     *
+     * */
     override fun saveListaTemas(temas: TemasList) {
+
+        /**
+         *
+         * @param prefsEditor utiliza la referencia
+         * @see sharedPreferences y permite la edición de sharedPreferences
+         *
+         * @param json utiliza la referencia
+         * @see gson de la clase
+         * @see Gson para convertir los datos de
+         * @property temas en Json
+         *
+         * Seguidamente se introducen estos datos en shared preferences a través de
+         * @param prefsEditor con el identificador
+         * @see TEMAS_DATA
+         *
+         * */
         val prefsEditor = sharedPreferences?.edit()
         val json = gson?.toJson(temas)
         prefsEditor?.putString(TEMAS_DATA,json)
         prefsEditor?.apply()
     }
 
+    /**
+     *
+     * @see getListaTemas sirve para obtener información de los temas de sharedPreferences
+     *
+     * */
     override fun getListaTemas() {
+
+        /**
+         *
+         * Se comprueba si sharedPreferences contiene información de usuario a través de la referencia
+         * @see sharedPreferences utilizando el método
+         * @see SharedPreferences.contains con la clave
+         * @see USER_DATA
+         *
+         * Si esto es [true] se crea la variable
+         * @param json con la que se lee la información a través de la clave anterior
+         * @see SharedPreferences.getString con la clave
+         * @see TEMAS_DATA
+         *
+         * Esa información se guarda en la variable que almacena los datos del usuario
+         * @see temasData.lista utilizando la variable
+         * @see gson con su método
+         * @see Gson.fromJson con la variable json y la clase
+         * @see TemasList como parámetros
+         *
+         * */
         if (sharedPreferences!!.contains(TEMAS_DATA)){
             val json = sharedPreferences?.getString(TEMAS_DATA,"")
             temasData.lista = gson!!.fromJson(json,TemasList::class.java)
         }
     }
 
+    /**
+     *
+     * @see savePreguntas implementa el método de la interfaz
+     * @see PreguntasData.savingInterface.saveUserData Sirve para guardar información de las preguntas en sharedPreferences
+     * Recibe el parámetro
+     * @property preguntas que es de la clase
+     * @see PreguntasTotal
+     *
+     * */
     override fun savePreguntas(preguntas: PreguntasTotal) {
+
+        /**
+         *
+         * @param prefsEditor utiliza la referencia
+         * @see sharedPreferences y permite la edición de sharedPreferences
+         *
+         * @param json utiliza la referencia
+         * @see gson de la clase
+         * @see Gson para convertir los datos de
+         * @property preguntas en Json
+         *
+         * Seguidamente se introducen estos datos en shared preferences a través de
+         * @param prefsEditor con el identificador
+         * @see PREGUNTAS_DATA
+         *
+         * */
         val prefsEditor = sharedPreferences?.edit()
         val json = gson?.toJson(preguntas)
         prefsEditor?.putString(PREGUNTAS_DATA,json)
         prefsEditor?.apply()
     }
 
+    /**
+     *
+     * @see getPreguntas sirve para obtener información de los temas de sharedPreferences
+     *
+     * */
     override fun getPreguntas() {
+
+        /**
+         *
+         * Se comprueba si sharedPreferences contiene información de usuario a través de la referencia
+         * @see sharedPreferences utilizando el método
+         * @see SharedPreferences.contains con la clave
+         * @see USER_DATA
+         *
+         * Si esto es [true] se crea la variable
+         * @param json con la que se lee la información a través de la clave anterior
+         * @see SharedPreferences.getString con la clave
+         * @see PREGUNTAS_DATA
+         *
+         * Esa información se guarda en la variable que almacena los datos del usuario
+         * @see preguntasData.listaPreguntasTotal utilizando la variable
+         * @see gson con su método
+         * @see Gson.fromJson con la variable json y la clase
+         * @see PreguntasTotal como parámetros
+         *
+         * */
         if (sharedPreferences!!.contains(PREGUNTAS_DATA)){
             val json = sharedPreferences?.getString(PREGUNTAS_DATA,"")
             preguntasData.listaPreguntasTotal = gson!!.fromJson(json,PreguntasTotal::class.java)
