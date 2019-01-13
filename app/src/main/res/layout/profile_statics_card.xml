@@ -8,7 +8,7 @@
         android:background="@android:color/transparent">
 
     <TextView
-            android:text="Geografía"
+            android:text="Nombre Tema"
             android:layout_width="0dp"
             android:layout_height="wrap_content"
             android:id="@+id/profileSpecificTheme"
@@ -24,6 +24,7 @@
             android:layout_marginBottom="32dp"
             app:layout_constraintBottom_toBottomOf="parent"
             android:textColor="@android:color/background_light"/>
+
     <RatingBar
             android:layout_width="wrap_content"
             app:layout_constraintTop_toTopOf="@+id/profileSpecificTheme"
@@ -41,4 +42,5 @@
             style="@style/customRatingBar"
             android:theme="@style/customRatingBar"
             android:isIndicator="true"/>
+
 </android.support.constraint.ConstraintLayout>

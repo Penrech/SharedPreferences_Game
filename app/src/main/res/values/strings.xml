@@ -27,8 +27,6 @@
     <string name="error_no_game_data">No hay datos de juego</string>
     <string name="error_restart_app">Reiniciar App</string>
     <string name="selection_title">Seleccionar un tema</string>
-
-    <!-- TODO: Remove or change this placeholder text -->
     <string name="hello_blank_fragment">Hello blank fragment</string>
     <string name="selection_layout_actual_score">Puntuación actual</string>
     <string name="counter_timeout">Timeout</string>
@@ -44,4 +42,11 @@
     <string name="development_not_implemented">No implementado</string>
     <string name="profile_text_introduce_nickname">Introduce un Nickname</string>
     <string name="register_button_text">Registrarse</string>
+    <string name="profile_nickname_dificulty_label">Nickname y dificultad</string>
+    <string name="endgame_engdame_label">Fin del juego</string>
+    <string name="endgame_back_to_menu">Volver al menu</string>
+    <string name="startgame_tip_1">Dibuja un tick para marcar la afirmación como correcta</string>
+    <string name="stargame_tip2">Dibuja un tick invertido para marcar la afirmación como falsa</string>
+    <string name="stargame_main_label">Recuerda</string>
+    <string name="stargame_button_start_text">Iniciar</string>
 </resources>

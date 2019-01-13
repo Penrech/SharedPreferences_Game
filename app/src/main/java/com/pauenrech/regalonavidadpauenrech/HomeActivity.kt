@@ -1,6 +1,5 @@
 package com.pauenrech.regalonavidadpauenrech
 
-
 import android.app.Activity
 import android.content.Intent
 import android.content.SharedPreferences
@@ -30,7 +29,6 @@ import com.google.firebase.database.FirebaseDatabase
 import com.google.firebase.database.DatabaseError
 import com.google.firebase.database.DataSnapshot
 import com.google.firebase.database.ValueEventListener
-
 
 class HomeActivity : AppCompatActivity(),
     /**
@@ -252,7 +250,6 @@ class HomeActivity : AppCompatActivity(),
         getPreguntasFromFirebase()
         saveUsuarioToFirebase(userData.user)
         setTimer(2)
-
     }
 
     /**
@@ -596,7 +593,6 @@ class HomeActivity : AppCompatActivity(),
         homeHighScore.text = "${userData.user.puntuacion}"
 
         supportActionBar?.setDisplayShowTitleEnabled(false)
-
     }
 
     /**

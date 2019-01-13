@@ -14,6 +14,7 @@ class profileSpecificListAdapter(var temasPorDificultad: MutableList<User.ThemeS
     override fun onCreateViewHolder(p0: ViewGroup, p1: Int): SpecificListViewHolder {
        val celdaPuntuacionEspecifica = LayoutInflater.from(p0.context)
            .inflate(R.layout.profile_statics_card,p0,false)
+
         return SpecificListViewHolder(celdaPuntuacionEspecifica)
     }
 
@@ -22,7 +23,6 @@ class profileSpecificListAdapter(var temasPorDificultad: MutableList<User.ThemeS
     }
 
     override fun onBindViewHolder(p0: SpecificListViewHolder, p1: Int) {
-
         p0.tema.text = temasPorDificultad[p1].name
         p0.puntuacion.rating = (temasPorDificultad[p1].score / 2f)
     }

@@ -15,10 +15,11 @@ import java.util.*
  * @property puntuacion es el valor que tiene dicha pregunta
  *
  */
-class Pregunta(var id: String? = null,
-               var respuesta_correcta: String? = null,
-               var respuesta_incorrecta: String? = null,
-               var puntuacion: Int? = null)
+class Pregunta(
+    var id: String? = null,
+    var respuesta_correcta: String? = null,
+    var respuesta_incorrecta: String? = null,
+    var puntuacion: Int? = null)
 {
     /**
      *
@@ -91,5 +92,4 @@ class Pregunta(var id: String? = null,
         }
         return topAnswer!!
     }
-
 }

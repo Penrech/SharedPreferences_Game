@@ -12,7 +12,8 @@ package com.pauenrech.regalonavidadpauenrech.model
  * @property colorEnd es el color final del del gradiente que se verá en pantalla cuando se este jugando en este tema
  *
  * */
-class Tema(var name: String = "",
-           var id: String = "",
-           var colorStart: String = "",
-           var colorEnd: String = "") {}
+class Tema(
+    var name: String = "",
+    var id: String = "",
+    var colorStart: String = "",
+    var colorEnd: String = "") {}

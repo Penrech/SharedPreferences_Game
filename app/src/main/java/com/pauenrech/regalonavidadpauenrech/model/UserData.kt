@@ -10,8 +10,9 @@ package com.pauenrech.regalonavidadpauenrech.model
  *  @see SaveAndGetLocalUserData
  *
  */
-class UserData(var user: User = User(),
-               var savingInterface: SaveAndGetLocalUserData? = null)
+class UserData(
+    var user: User = User(),
+    var savingInterface: SaveAndGetLocalUserData? = null)
 {
 
     /**

@@ -7,7 +7,8 @@
         android:layout_height="match_parent"
         android:focusableInTouchMode="true"
         tools:context=".SelectionActivity"
-        android:background="@drawable/gradient_background" android:fitsSystemWindows="true"
+        android:background="@drawable/gradient_background"
+        android:fitsSystemWindows="true"
         android:id="@+id/rootSelection">
 
     <android.support.design.widget.AppBarLayout

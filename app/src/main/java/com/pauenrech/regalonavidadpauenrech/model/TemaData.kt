@@ -10,9 +10,11 @@ package com.pauenrech.regalonavidadpauenrech.model
  *  @see SaveOrGetListaTemas
  *
  */
-class TemaData(var lista: TemasList = TemasList() ,
-               var savingInterface: SaveOrGetListaTemas? = null)
+class TemaData(
+    var lista: TemasList = TemasList() ,
+    var savingInterface: SaveOrGetListaTemas? = null)
 {
+
     /**
      *
      * Esta interfaz define los métodos para recibir y guardar datos de temas
@@ -61,5 +63,4 @@ class TemaData(var lista: TemasList = TemasList() ,
     fun getLocalListaTemas(){
         savingInterface?.getListaTemas()
     }
-
 }

@@ -1,6 +1,5 @@
 package com.pauenrech.regalonavidadpauenrech.model
 
-
 /**
  *
  *  Esta clase gestiona la obtención y guardado de la información de las preguntas del juego
@@ -11,9 +10,9 @@ package com.pauenrech.regalonavidadpauenrech.model
  *  @see SaveAndGetListaPreguntas
  *
  */
-class PreguntasData(var listaPreguntasTotal: PreguntasTotal = PreguntasTotal(),
-                    var savingInterface: SaveAndGetListaPreguntas? = null)
-
+class PreguntasData(
+    var listaPreguntasTotal: PreguntasTotal = PreguntasTotal(),
+    var savingInterface: SaveAndGetListaPreguntas? = null)
 {
 
     /**
@@ -64,7 +63,4 @@ class PreguntasData(var listaPreguntasTotal: PreguntasTotal = PreguntasTotal(),
         listaPreguntasTotal = preguntas
         savingInterface?.savePreguntas(this.listaPreguntasTotal)
     }
-
-
-
 }

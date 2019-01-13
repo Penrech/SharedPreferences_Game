@@ -12,6 +12,7 @@ package com.pauenrech.regalonavidadpauenrech.model
  * de modelo para la BBDD de Firebase
  *
  * */
-class PreguntasDificultad(var id: Int? = null,
-                          var name: String? = null,
-                          var temas: MutableList<PreguntasTema> = mutableListOf()) {}
+class PreguntasDificultad(
+    var id: Int? = null,
+    var name: String? = null,
+    var temas: MutableList<PreguntasTema> = mutableListOf()) {}

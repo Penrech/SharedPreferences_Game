@@ -61,7 +61,6 @@ class User(
             listaTemas.put(it.id,it.name)
         }
         numeroDeTemas = listaTemas.size
-
     }
 
     /**
@@ -292,9 +291,9 @@ class User(
      *@property score la puntuación de cada tema dentro de una dificultad en concreto.
      *
      * */
-    class ThemeScore(var name: String,
-                     var id: String,
-                     var dificultadid: Int,
-                     var score: Int)
-
+    class ThemeScore(
+        var name: String,
+        var id: String,
+        var dificultadid: Int,
+        var score: Int)
 }

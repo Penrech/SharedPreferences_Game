@@ -2,6 +2,5 @@
 <ripple
         xmlns:android="http://schemas.android.com/apk/res/android"
         android:color="@color/colorGradientEnd">
-    <item android:drawable="@drawable/rounded_btn_register"></item>
-
+        <item android:drawable="@drawable/rounded_btn_register"></item>
 </ripple>

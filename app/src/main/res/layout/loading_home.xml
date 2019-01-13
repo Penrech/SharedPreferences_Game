@@ -30,6 +30,7 @@
                 app:layout_constraintVertical_chainStyle="spread"
                 app:layout_constraintHorizontal_bias="0.5"
                 app:layout_constraintBottom_toTopOf="@+id/progressBar"/>
+
         <ProgressBar
                 style="@style/Widget.AppCompat.ProgressBar.Horizontal"
                 android:theme="@style/customProgressBar"

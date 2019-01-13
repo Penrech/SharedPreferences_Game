@@ -14,16 +14,15 @@ import com.google.firebase.database.*
 import com.pauenrech.regalonavidadpauenrech.adapters.profileSpecificListAdapter
 import com.pauenrech.regalonavidadpauenrech.model.User
 import com.pauenrech.regalonavidadpauenrech.layoutManagers.NoScrollLinearLayoutManager
-import kotlinx.android.synthetic.main.activity_register.*
-
 
 class ProfileActivity : AppCompatActivity() {
 
-
     private var layoutManager: NoScrollLinearLayoutManager? = null
     private var adapter: RecyclerView.Adapter<profileSpecificListAdapter.SpecificListViewHolder>? = null
+
     var initialSpecificData : List<MutableList<User.ThemeScore>>? = null
     var initialDificultad : Int? = null
+
     val userDataReference = HomeActivity.userData
     var database : FirebaseDatabase? = null
     var usersRef: DatabaseReference? = null
@@ -31,38 +30,35 @@ class ProfileActivity : AppCompatActivity() {
     var handler: Handler? = null
     var runnable: Runnable? = null
 
-
-    /**
-     *
-     * Declaro una variable input manager para gestionar más adelante cuando se muestra o oculta el teclado
-     *
-     * */
     var imm : InputMethodManager? = null
+
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         setContentView(R.layout.activity_profile)
+
         database = FirebaseDatabase.getInstance()
         usersRef = database?.getReference("usuarios")
 
         handler = Handler()
         runnable = Runnable {
-            Log.i("TAG","Estoy Corriendo")
             if (!nicknameChanged){
                 imm?.hideSoftInputFromWindow(profileNickNameEdit.windowToken, 0);
+
                 Toast.makeText(this,getString(R.string.error_no_conection_no_data),Toast.LENGTH_LONG).show()
                 setNicknameNoEditable(true)
             }
         }
+
         /**
          *
          * Inserto el valor de los datos del usuario en sus correspondientes lugares, extraigo los datos del homeActivity
          * actividad que utilizo para gestionar la "base de datos local" con shared preferences
          *
          * */
-
         profileNickName.text = userDataReference.user.nickname
         profile_seekBar.progress = userDataReference.user.dificultad
         profilePuntuacionGlobalText.text = "${userDataReference.user.puntuacion}"
+
         initialSpecificData = userDataReference.user.temas
         initialDificultad = userDataReference.user.dificultad
 
@@ -77,7 +73,6 @@ class ProfileActivity : AppCompatActivity() {
          *
          *
          * */
-
         if (userDataReference.user.ranking != -1){
             profileRanking.text = "${userDataReference.user.ranking}"
         }
@@ -90,7 +85,6 @@ class ProfileActivity : AppCompatActivity() {
          * Aqui implemento la variable imm para gestionar cuando se muestra o no el teclado
          *
          * */
-
         imm = getSystemService(INPUT_METHOD_SERVICE) as InputMethodManager
 
         /**
@@ -124,14 +118,17 @@ class ProfileActivity : AppCompatActivity() {
              * */
             if (profileNickName.visibility == View.VISIBLE){
                 nicknameChanged = false
+
                 profileNickNameEdit.setText(profileNickName.text.toString())
                 profileChangeNicknameBtn.setImageResource(R.drawable.ic_round_done_24px_white)
+
                 profileNickName.visibility = View.GONE
                 profileNickNameEdit.visibility = View.VISIBLE
                 profileNickNameEdit.requestFocus()
-                imm?.toggleSoftInput(InputMethodManager.SHOW_FORCED, 0)
 
+                imm?.toggleSoftInput(InputMethodManager.SHOW_FORCED, 0)
             }
+
             /**
              *
              * En este caso se llama a una función que implementa to_do el código para hacer el código más legible
@@ -141,19 +138,15 @@ class ProfileActivity : AppCompatActivity() {
                 validarTextoNickname()
             }
         }
-
-
     }
 
     fun setSpecificRecyclerView(){
-
         if (initialSpecificData!![0].size > 1){
             layoutManager = NoScrollLinearLayoutManager(this)
             adapter = profileSpecificListAdapter(initialSpecificData!![initialDificultad!!])
 
             profileSpecificsRV.adapter = adapter
             profileSpecificsRV.layoutManager = layoutManager
-
         }
         else{
             profileSpecificScoreLabel.visibility = View.GONE
@@ -172,7 +165,6 @@ class ProfileActivity : AppCompatActivity() {
             }
 
             override fun onStartTrackingTouch(seekBar: SeekBar) {}
-
             override fun onStopTrackingTouch(seekBar: SeekBar) {}
         })
     }
@@ -183,16 +175,16 @@ class ProfileActivity : AppCompatActivity() {
      *
      * */
     fun validarTextoNickname(){
-               if (profileNickNameEdit.text.length < 2){
-                   profileNicknameErrorLabel.visibility = View.VISIBLE
-                   profileNicknameErrorLabel.text = getString(R.string.profile_nickname_error_too_short)
-               }
-               else if (profileNickNameEdit.text.toString() == userDataReference.user.nickname){
-                   setNicknameNoEditable(true)
-               }
-               else{
-                    validateWithFirebase(profileNickNameEdit.text.toString())
-               }
+        if (profileNickNameEdit.text.length < 2){
+           profileNicknameErrorLabel.visibility = View.VISIBLE
+           profileNicknameErrorLabel.text = getString(R.string.profile_nickname_error_too_short)
+        }
+        else if (profileNickNameEdit.text.toString() == userDataReference.user.nickname){
+           setNicknameNoEditable(true)
+        }
+        else{
+            validateWithFirebase(profileNickNameEdit.text.toString())
+        }
     }
 
     fun setNicknameNoEditable(error: Boolean){
@@ -203,22 +195,29 @@ class ProfileActivity : AppCompatActivity() {
         profileChangeNicknameBtn.visibility = View.VISIBLE
         profileNicknameLoading.visibility = View.GONE
 
-        if (!error)
+        if (!error) {
             userDataReference.changeNickname(profileNickNameEdit.text.toString())
+        }
 
         profileNickName.text = userDataReference.user.nickname
         profileChangeNicknameBtn.setImageResource(R.drawable.ic_round_edit_24px_white)
+
         profileNickName.visibility = View.VISIBLE
         profileNickNameEdit.visibility = View.GONE
+
         imm?.hideSoftInputFromWindow(profileNickNameEdit.windowToken, 0);
+
         nicknameChanged = true
     }
 
     fun validateWithFirebase(newNickname: String){
         profileChangeNicknameBtn.visibility = View.INVISIBLE
         profileNicknameLoading.visibility = View.VISIBLE
+
         setTimer(2)
+
         val lowerCaseNickname = newNickname.toLowerCase()
+
         usersRef?.orderByChild("nicknameLowerCase")?.equalTo(lowerCaseNickname)?.addListenerForSingleValueEvent(object :
             ValueEventListener {
             override fun onDataChange(dataSnapshot: DataSnapshot) {
@@ -228,21 +227,21 @@ class ProfileActivity : AppCompatActivity() {
                         profileNicknameLoading.visibility = View.GONE
                         profileNicknameErrorLabel.text = getString(R.string.error_nickname_already_in_use)
                         profileNicknameErrorLabel.visibility = View.VISIBLE
+
                         handler?.removeCallbacks(runnable)
                     }
                     else{
                        setNicknameNoEditable(false)
                     }
-
-
                 }
             }
+
             override fun onCancelled(error: DatabaseError) {
                 if (nicknameChanged == false) {
                     Toast.makeText(this@ProfileActivity, getString(R.string.error_conexion), Toast.LENGTH_LONG).show()
                     setNicknameNoEditable(true)
                 }
-                Log.i("TAG", "Failed to read value.", error.toException())
+                Log.i("CONECTION","Error de conexión obteniedo datos usuario ${error.toException()}")
             }
         })
     }
@@ -250,37 +249,36 @@ class ProfileActivity : AppCompatActivity() {
     fun setTimer(seconds: Int){
         nicknameChanged = false
         val miliseconds = (seconds * 1000).toLong()
+
         handler!!.postDelayed(runnable,miliseconds)
-
-
     }
 
     override fun onBackPressed() {
         if (nicknameChanged == false){
             setNicknameNoEditable(true)
         }
-        else
+        else{
             super.onBackPressed()
+        }
     }
 
-    /**
-     *
-     * Se cierra la activity sin animaciones de salida ni entrada
-     *
-     * */
     override fun finish() {
         handler?.removeCallbacks(runnable)
+
         userDataReference.changeDificultad((profile_seekBar.progress))
+
         imm?.hideSoftInputFromWindow(profileNickNameEdit.windowToken, 0);
+
         super.finish()
-        //overridePendingTransition(0,0)
+
         overridePendingTransition(R.anim.slide_from_left,R.anim.slide_to_right)
     }
 
     override fun onPause() {
         userDataReference.changeDificultad((profile_seekBar.progress))
+
         imm?.hideSoftInputFromWindow(profileNickNameEdit.windowToken, 0);
+
         super.onPause()
     }
-
 }

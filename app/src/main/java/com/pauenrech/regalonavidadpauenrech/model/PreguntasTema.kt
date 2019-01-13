@@ -12,10 +12,12 @@ package com.pauenrech.regalonavidadpauenrech.model
  * de modelo para la BBDD de Firebase
  *
  * */
-class PreguntasTema(var id: String?= null,
-                    var name: String?= null,
-                    var preguntas: MutableList<Pregunta> = mutableListOf())
+class PreguntasTema(
+    var id: String?= null,
+    var name: String?= null,
+    var preguntas: MutableList<Pregunta> = mutableListOf())
 {
+
     /**
      *
      * @see getRandomQuestions obtiene 10 preguntas aleatorias del conjunto de preguntas de un tema
@@ -44,5 +46,4 @@ class PreguntasTema(var id: String?= null,
         randomQuestions.shuffle()
         return randomQuestions.slice(0 until 10)
     }
-
 }

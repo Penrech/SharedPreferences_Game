@@ -1,24 +1,19 @@
 package com.pauenrech.regalonavidadpauenrech.fragments
 
-
 import android.content.Context
 import android.os.Bundle
 import android.support.v4.app.Fragment
-import android.transition.Transition
-import android.transition.TransitionInflater
-import android.transition.TransitionManager
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
 
 import com.pauenrech.regalonavidadpauenrech.R
-import kotlinx.android.synthetic.main.activity_selection.*
 import kotlinx.android.synthetic.main.fragment_start_game.view.*
-
 
 class StartGameFragment : Fragment() {
 
     var activityCallback: StartGameFragment.clickListener? = null
+
     interface clickListener{
         fun onStartGameButtonClick()
     }
@@ -27,16 +22,16 @@ class StartGameFragment : Fragment() {
         inflater: LayoutInflater, container: ViewGroup?,
         savedInstanceState: Bundle?
     ): View? {
-        // Inflate the layout for this fragment
         val rootView = inflater.inflate(R.layout.fragment_start_game, container, false)
+
         rootView.startGameButton.setOnClickListener {
             activityCallback!!.onStartGameButtonClick()
         }
+
         return rootView
     }
 
     override fun onAttach(context: Context?) {
-
         super.onAttach(context)
         try {
             activityCallback = context as clickListener
@@ -47,8 +42,7 @@ class StartGameFragment : Fragment() {
 
     override fun onDetach() {
         super.onDetach()
+
         activityCallback = null
     }
-
-
 }
