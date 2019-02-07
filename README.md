@@ -3,7 +3,7 @@
 <b>Main tools</b>
 <ul>
 <li>SharedPreferences</li>
-<li>Firebase</li>
+<li>Firebase realtime database</li>
 <li>Gesture Detector</li>
 </ul>
 
