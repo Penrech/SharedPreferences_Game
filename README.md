@@ -32,15 +32,15 @@
 
 <p align="center">
   <a href='https://www.youtube.com/watch?v=IwiZtOHvoiU'><img width = '49%' src='JuegoNavidad1.gif'/></a>
-  <a href='#imgE1'><img id='imgE1' width = '49%' src=''/></a>
+  <a href='#imgE1'><img id='imgE1' width = '49%' src='SharedPreferencesGame_1.png'/></a>
 </p>
 <br>
 <p align="center">
-  <a href='#imgE2'><img id='imgE2' width = '49%' src=''/></a>
+  <a href='#imgE2'><img id='imgE2' width = '49%' src='SharedPreferencesGame_2.png'/></a>
   <a href='https://www.youtube.com/watch?v=2uMa0kjMZcw'><img width = '49%' src='JuegoNavidad2.gif'/></a>
 </p>
 <br>
 <p align="center">
   <a href='https://www.youtube.com/watch?v=vwvHZa4tVXk'><img width = '49%' src='JuegoNavidad3.gif'/></a>
-   <a href='#imgE3'><img id='imgE3' width = '49%' src=''/></a>
+   <a href='#imgE3'><img id='imgE3' width = '49%' src='SharedPreferencesGame_3.png'/></a>
 </p>
