@@ -31,16 +31,16 @@
 <p style>*A higher quality video opens on YouTube when clicked</p>
 
 <p align="center">
-  <a href='https://www.youtube.com/watch?v=-EaXq6ROKbI'><img width = '49%' src='AppPizzeria1_low.gif'/></a>
-  <a href='#imgE1'><img id='imgE1' width = '49%' src='AppPizzeria1.png'/></a>
+  <a href='https://www.youtube.com/watch?v=IwiZtOHvoiU'><img width = '49%' src='JuegoNavidad1.gif'/></a>
+  <a href='#imgE1'><img id='imgE1' width = '49%' src='SharedPreferencesGame_1-04.png'/></a>
 </p>
 <br>
 <p align="center">
-  <a href='#imgE2'><img id='imgE2' width = '49%' src='AppPizzeria2.png'/></a>
-  <a href='https://www.youtube.com/watch?v=pCmnH_UwlHw'><img width = '49%' src='AppPizzeria2_low.gif'/></a>
+  <a href='#imgE2'><img id='imgE2' width = '49%' src='SharedPreferencesGame_2-05.png'/></a>
+  <a href='https://www.youtube.com/watch?v=2uMa0kjMZcw'><img width = '49%' src='JuegoNavidad2.gif'/></a>
 </p>
 <br>
 <p align="center">
-  <a href='https://www.youtube.com/watch?v=C5MCig31mpg'><img width = '49%' src='AppPizzeria3_low.gif'/></a>
-   <a href='#imgE3'><img id='imgE3' width = '49%' src='AppPizzeria3.png'/></a>
+  <a href='https://www.youtube.com/watch?v=vwvHZa4tVXk'><img width = '49%' src='JuegoNavidad3.gif'/></a>
+   <a href='#imgE3'><img id='imgE3' width = '49%' src='SharedPreferencesGame_3-06.png'/></a>
 </p>
