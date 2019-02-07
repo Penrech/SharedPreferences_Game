@@ -13,15 +13,18 @@
 <p>The app use the data directly from the shared preferences and not from Firebase.</p>
 <p>Apart from the database part, the idea of the demo app was to create a Quiz game with custom gesture interaction</p>
 <p>The design part was a small challange on its own because I wanted to customize a lot of default Android assets, getting away from Material design this time. I have to admit that the final product looks a little bit too greenish</p>
+<p>Academic demo app, this app is not completely debugged, it's just a demo. It could contain not extracted text strings and not properly indented code</p>
 
 <h1>Screenshots</h1>
-<p>
-  <a href='#img1'><img id='img1' width = '49%' src='device-2019-02-05-123200.png'/></a>
-  <a href='#img2'><img id='img2' width = '49%' src='device-2019-02-05-123255.png'/></a>
+<p align = "center">
+  <a href='#img1'><img id='img1' width = '32%' src='device-2019-02-05-180713.png'/></a>
+  <a href='#img2'><img id='img2' width = '32%' src='device-2019-02-05-180736.png'/></a>
+  <a href='#img3'><img id='img3' width = '32%' src='device-2019-02-05-180804.png'/></a>
 </p>
-<p>
-  <a href='#img3'><img id='img3' width = '49%' src='device-2019-02-05-123346.png'/></a>
-  <a href='#img4'><img id='img4' width = '49%' src='device-2019-02-05-123438.png'/></a>
+<p align = "center">
+  <a href='#img4'><img id='img4' width = '32%' src='device-2019-02-05-180831.png'/></a>
+  <a href='#img5'><img id='img5' width = '32%' src='device-2019-02-05-180920.png'/></a>
+  <a href='#img6'><img id='img6' width = '32%' src='device-2019-02-05-183440.png'/></a>
 </p>
 
 <h1>Demo *</h1>
