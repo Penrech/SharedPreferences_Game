@@ -8,8 +8,8 @@
 </ul>
 
 <h1>Description</h1>
-<p>The idea behind this demo was to develop an app that has both an external and local databases. I know that Firebase in its own can make something similar to that, but I will upgrade on a future app</p>
-<p>The app gets the data from Firebase which are stored JSON format in the Shared Preferences of the App. It could be better to store it using other types of storage like SQLITE db or external files, but I've decided to keep it simple for this app</p>
+<p>The idea behind this demo was to develop an app that has both an external and local databases. I know that Firebase on its own can make something similar to that. The fully Firebase integration will be done on a future upgrade.</p>
+<p>The data get by the app from Firebase is stored JSON format in the Shared Preferences of the App. It could be better to store it using other types of storage like SQLITE db or external files, but I've decided to keep it simple for this app</p>
 <p>The app use the data directly from the shared preferences and not from Firebase.</p>
 <p>Apart from the database part, the idea of the demo app was to create a Quiz game with custom gesture interaction</p>
 <p>The design part was a small challange on its own because I wanted to customize a lot of default Android assets, getting away from Material design this time. I have to admit that the final product looks a little bit too greenish</p>
