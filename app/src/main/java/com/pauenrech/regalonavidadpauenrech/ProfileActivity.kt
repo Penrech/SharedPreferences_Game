@@ -20,17 +20,17 @@ class ProfileActivity : AppCompatActivity() {
     private var layoutManager: NoScrollLinearLayoutManager? = null
     private var adapter: RecyclerView.Adapter<profileSpecificListAdapter.SpecificListViewHolder>? = null
 
-    var initialSpecificData : List<MutableList<User.ThemeScore>>? = null
-    var initialDificultad : Int? = null
+    private var initialSpecificData : List<MutableList<User.ThemeScore>>? = null
+    private var initialDificultad : Int? = null
 
-    val userDataReference = HomeActivity.userData
-    var database : FirebaseDatabase? = null
-    var usersRef: DatabaseReference? = null
+    private val userDataReference = HomeActivity.userData
+    private var database : FirebaseDatabase? = null
+    private var usersRef: DatabaseReference? = null
     var nicknameChanged: Boolean = true
     var handler: Handler? = null
     var runnable: Runnable? = null
 
-    var imm : InputMethodManager? = null
+    private var imm : InputMethodManager? = null
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
@@ -42,7 +42,7 @@ class ProfileActivity : AppCompatActivity() {
         handler = Handler()
         runnable = Runnable {
             if (!nicknameChanged){
-                imm?.hideSoftInputFromWindow(profileNickNameEdit.windowToken, 0);
+                imm?.hideSoftInputFromWindow(profileNickNameEdit.windowToken, 0)
 
                 Toast.makeText(this,getString(R.string.error_no_conection_no_data),Toast.LENGTH_LONG).show()
                 setNicknameNoEditable(true)
@@ -140,7 +140,7 @@ class ProfileActivity : AppCompatActivity() {
         }
     }
 
-    fun setSpecificRecyclerView(){
+    private fun setSpecificRecyclerView(){
         if (initialSpecificData!![0].size > 1){
             layoutManager = NoScrollLinearLayoutManager(this)
             adapter = profileSpecificListAdapter(initialSpecificData!![initialDificultad!!])
@@ -154,7 +154,7 @@ class ProfileActivity : AppCompatActivity() {
         }
     }
 
-    fun setSeekBarListener(){
+    private fun setSeekBarListener(){
         profile_seekBar.setOnSeekBarChangeListener(object : SeekBar.OnSeekBarChangeListener {
 
             override fun onProgressChanged(seekBar: SeekBar, i: Int, b: Boolean) {
@@ -174,16 +174,14 @@ class ProfileActivity : AppCompatActivity() {
      * Esta función se encarga de validar si lo introducido en el editText sigue una serie de normas.
      *
      * */
-    fun validarTextoNickname(){
-        if (profileNickNameEdit.text.length < 2){
-           profileNicknameErrorLabel.visibility = View.VISIBLE
-           profileNicknameErrorLabel.text = getString(R.string.profile_nickname_error_too_short)
-        }
-        else if (profileNickNameEdit.text.toString() == userDataReference.user.nickname){
-           setNicknameNoEditable(true)
-        }
-        else{
-            validateWithFirebase(profileNickNameEdit.text.toString())
+    private fun validarTextoNickname(){
+        when {
+            profileNickNameEdit.text.length < 2 -> {
+                profileNicknameErrorLabel.visibility = View.VISIBLE
+                profileNicknameErrorLabel.text = getString(R.string.profile_nickname_error_too_short)
+            }
+            profileNickNameEdit.text.toString() == userDataReference.user.nickname -> setNicknameNoEditable(true)
+            else -> validateWithFirebase(profileNickNameEdit.text.toString())
         }
     }
 
@@ -205,12 +203,12 @@ class ProfileActivity : AppCompatActivity() {
         profileNickName.visibility = View.VISIBLE
         profileNickNameEdit.visibility = View.GONE
 
-        imm?.hideSoftInputFromWindow(profileNickNameEdit.windowToken, 0);
+        imm?.hideSoftInputFromWindow(profileNickNameEdit.windowToken, 0)
 
         nicknameChanged = true
     }
 
-    fun validateWithFirebase(newNickname: String){
+    private fun validateWithFirebase(newNickname: String){
         profileChangeNicknameBtn.visibility = View.INVISIBLE
         profileNicknameLoading.visibility = View.VISIBLE
 
@@ -221,7 +219,7 @@ class ProfileActivity : AppCompatActivity() {
         usersRef?.orderByChild("nicknameLowerCase")?.equalTo(lowerCaseNickname)?.addListenerForSingleValueEvent(object :
             ValueEventListener {
             override fun onDataChange(dataSnapshot: DataSnapshot) {
-                if (nicknameChanged == false){
+                if (!nicknameChanged){
                     if (dataSnapshot.childrenCount > 0){
                         profileChangeNicknameBtn.visibility = View.VISIBLE
                         profileNicknameLoading.visibility = View.GONE
@@ -237,7 +235,7 @@ class ProfileActivity : AppCompatActivity() {
             }
 
             override fun onCancelled(error: DatabaseError) {
-                if (nicknameChanged == false) {
+                if (!nicknameChanged) {
                     Toast.makeText(this@ProfileActivity, getString(R.string.error_conexion), Toast.LENGTH_LONG).show()
                     setNicknameNoEditable(true)
                 }
@@ -246,7 +244,7 @@ class ProfileActivity : AppCompatActivity() {
         })
     }
 
-    fun setTimer(seconds: Int){
+    private fun setTimer(seconds: Int){
         nicknameChanged = false
         val miliseconds = (seconds * 1000).toLong()
 
@@ -254,7 +252,7 @@ class ProfileActivity : AppCompatActivity() {
     }
 
     override fun onBackPressed() {
-        if (nicknameChanged == false){
+        if (!nicknameChanged){
             setNicknameNoEditable(true)
         }
         else{
@@ -267,7 +265,7 @@ class ProfileActivity : AppCompatActivity() {
 
         userDataReference.changeDificultad((profile_seekBar.progress))
 
-        imm?.hideSoftInputFromWindow(profileNickNameEdit.windowToken, 0);
+        imm?.hideSoftInputFromWindow(profileNickNameEdit.windowToken, 0)
 
         super.finish()
 
@@ -277,7 +275,7 @@ class ProfileActivity : AppCompatActivity() {
     override fun onPause() {
         userDataReference.changeDificultad((profile_seekBar.progress))
 
-        imm?.hideSoftInputFromWindow(profileNickNameEdit.windowToken, 0);
+        imm?.hideSoftInputFromWindow(profileNickNameEdit.windowToken, 0)
 
         super.onPause()
     }

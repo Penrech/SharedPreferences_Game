@@ -21,7 +21,7 @@ class TemaData(
      * Incluye los metodos:
      *
      * @see saveListaTemas el cual recibe el parámetro
-     * @property temas de la clase
+     * temas de la clase
      * @see TemasList
      *
      * @see getListaTemas

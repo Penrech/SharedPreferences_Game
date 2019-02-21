@@ -79,7 +79,7 @@
                         app:layout_constraintHorizontal_bias="0.0"/>
 
                 <TextView
-                        android:text="Error"
+                        android:text="@string/error_default_placeholder"
                         android:layout_width="0dp"
                         android:layout_height="wrap_content"
                         android:id="@+id/registerNicknameErrorLabel"

@@ -23,7 +23,7 @@
                 android:layout_height="match_parent">
 
             <TextView
-                    android:text="Titulo de Alerta"
+                    android:text="@string/titulo_de_alerta_placeholder"
                     android:layout_width="0dp"
                     android:layout_height="wrap_content"
                     android:id="@+id/customDialogTitle"
@@ -39,7 +39,7 @@
                     android:textAlignment="textStart"/>
 
             <TextView
-                    android:text="Texto de alerta"
+                    android:text="@string/texto_de_alerta_placeholder"
                     android:layout_width="0dp"
                     android:layout_height="wrap_content"
                     android:id="@+id/customDialogMessage"
@@ -54,7 +54,7 @@
                     android:textColor="@color/colorPrimaryDark"/>
 
             <Button
-                    android:text="Button"
+                    android:text="@string/button_alerta_placeholder"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
                     android:id="@+id/customDialogPrimaryButton"
@@ -73,7 +73,7 @@
                     android:textColor="@color/colorPrimaryDark"/>
 
             <Button
-                    android:text="Button"
+                    android:text="@string/button_alerta_placeholder"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
                     android:id="@+id/customDialogSecundaryButton"

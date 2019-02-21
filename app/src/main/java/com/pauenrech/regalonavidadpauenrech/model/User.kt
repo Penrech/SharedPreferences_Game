@@ -41,7 +41,7 @@ class User(
      * @see numeroDeTemas es una variable que guarda el número de temas
      *
      * */
-    private var listaTemas: MutableMap<String,String> = HashMap()
+    private var listaTemas: MutableMap<String,String> = mutableMapOf()
     var numeroDeTemas : Int = 0
 
     /**

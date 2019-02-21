@@ -1,7 +1,6 @@
 package com.pauenrech.regalonavidadpauenrech.tools
 
 import android.os.AsyncTask
-import android.util.Log
 import java.lang.Exception
 
 class WaitSecondsAsyncTask(val taskCompleteListener: TaskCompleted ): AsyncTask<Int,Void,Boolean>() {

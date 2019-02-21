@@ -21,7 +21,7 @@ class PreguntasData(
      * Incluye los metodos:
      *
      * @see savePreguntas el cual recibe el parámetro
-     * @property peguntas de la clase
+     * peguntas de la clase
      * @see PreguntasTotal
      *
      * @see getPreguntas

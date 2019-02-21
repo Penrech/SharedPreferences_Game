@@ -1,5 +1,5 @@
 <resources>
-    <string name="app_name">Chancy Statement</string>
+    <string name="app_name">Chancys[Demo]</string>
     <string name="action_profile">Perfil</string>
     <string name="action_ranking">Ranking</string>
     <string name="action_help">Ayuda</string>
@@ -49,4 +49,22 @@
     <string name="stargame_tip2">Dibuja un tick invertido para marcar la afirmación como falsa</string>
     <string name="stargame_main_label">Recuerda</string>
     <string name="stargame_button_start_text">Iniciar</string>
+    <string name="error_default_placeholder">Error</string>
+    <string name="nickname_default_placeholder">Nickname</string>
+    <string name="score_default_placeholder">500000</string>
+    <string name="ranking_default_placeholder">150</string>
+    <string name="titulo_de_alerta_placeholder">Titulo de Alerta</string>
+    <string name="texto_de_alerta_placeholder">Texto de alerta</string>
+    <string name="button_alerta_placeholder">Button</string>
+    <string name="obtanined_score_label">Puntuación obtenida</string>
+    <string name="correct_answers_label">Respuestas correctas</string>
+    <string name="new_label_record">Nuevo record</string>
+    <string name="default_new_score_placeholder">+200</string>
+    <string name="points_label">puntos</string>
+    <string name="default_num_answers_placeholder">0/10</string>
+    <string name="counter_default_time_placeholder">00:15</string>
+    <string name="default_answer_response_label">Correcto</string>
+    <string name="default_answer_text_placeholder">Pregunta</string>
+    <string name="default_category_name_placeholder">Nombre categoria</string>
+    <string name="default_theme_name_placeholder">Nombre Tema</string>
 </resources>

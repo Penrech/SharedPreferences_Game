@@ -45,8 +45,8 @@ class HomeActivity : AppCompatActivity(),
 
     /**
      *
-     * @param loadingScene Escena inicial, cuando la app está cargando
-     * @param homeScene Escena de la actividad home una vez cargada
+     * @see loadingScene Escena inicial, cuando la app está cargando
+     * @see homeScene Escena de la actividad home una vez cargada
      *
      */
     private var loadingScene : Scene? = null
@@ -55,11 +55,11 @@ class HomeActivity : AppCompatActivity(),
     /**
      *
      * Todos estos parámetros son para referenciar la app con la base de datos externa Firebase
-     * @param database es el la referencia principal con la base de datos
-     * @param conectionRef es la referencia con un objeto de la base de datos que informa sobre la conexión
-     * @param preguntasRef es la referencia con el bloque de preguntas guardado en la base de datos
-     * @param temasRef es la referencia con el bloque de temas guardado en la base de datos
-     * @param usuariosRef es la referencia con el bloque de usuarios guardado en la base de datos
+     * @see database es el la referencia principal con la base de datos
+     * @see conectionRef es la referencia con un objeto de la base de datos que informa sobre la conexión
+     * @see preguntasRef es la referencia con el bloque de preguntas guardado en la base de datos
+     * @see temasRef es la referencia con el bloque de temas guardado en la base de datos
+     * @see usuariosRef es la referencia con el bloque de usuarios guardado en la base de datos
      *
      * */
     private var database : FirebaseDatabase? = null
@@ -70,7 +70,7 @@ class HomeActivity : AppCompatActivity(),
 
     /**
      *
-     * @param mainUILoaded es un booleano que indica si la UI de home ha sido cargada o si todavía está en
+     * @see mainUILoaded es un booleano que indica si la UI de home ha sido cargada o si todavía está en
      * la escena loadingScene
      *
      * */
@@ -80,40 +80,40 @@ class HomeActivity : AppCompatActivity(),
      * Grupo de variables estáticas de la clase
      * Objecto estático de la clase HomeActivity
      *
-     * @param conectionState es un boleano donde se guarda el estado de la conexión de la app con su base de datos
+     * @see conectionState es un boleano donde se guarda el estado de la conexión de la app con su base de datos
      * online : (true -> conectado) (false -> desconectada).
      * False (desconectada) como valor inicial
      *
-     * @param USER_DATA define un string que se utiliza como clave para los objetos de clase
+     * @see USER_DATA define un string que se utiliza como clave para los objetos de clase
      * @see User en la base de datos local
      *
-     * @param TEMAS_DATA define un string que se utiliza como clave para los objetos de clase
+     * @see TEMAS_DATA define un string que se utiliza como clave para los objetos de clase
      * @see TemasList en la base de datos local
      *
-     * @param PREGUNTAS_DATA define un string que se utiliza como clave para los objetos de clase
+     * @see PREGUNTAS_DATA define un string que se utiliza como clave para los objetos de clase
      * @see PreguntasTotal en la base de datos local
      *
-     * @param userData almacena una instancia de la clase
+     * @see userData almacena una instancia de la clase
      * @see UserData en la que se almacenan los datos del usuario mientras la aplicación está corriendo
      *
-     * @param temasData almacena una instancia de la clase
+     * @see temasData almacena una instancia de la clase
      * @see TemaData en la que se almacenan los datos de los temas mientras la aplicación está corriendo
      *
-     * @param preguntasData almacena una instancia de la clase
+     * @see preguntasData almacena una instancia de la clase
      * @see PreguntasData en la que se almacenan los datos de los temas mientras la aplicación está corriendo
      *
-     * @param sharedPreferences declara una variable de la clase SharedPreferences, para utilizarla como referencia
+     * @see sharedPreferences declara una variable de la clase SharedPreferences, para utilizarla como referencia
      * con la base de datos SharedPreferences
      *
-     * @param gson declara una variable de la clase de Google Gson, la cual permite hacer parse de Json en String y
+     * @see gson declara una variable de la clase de Google Gson, la cual permite hacer parse de Json en String y
      * viceversa
      *
      * */
     companion object {
         var conectionState = false
-        val USER_DATA = "userData"
-        val TEMAS_DATA = "temasData"
-        val PREGUNTAS_DATA = "preguntasData"
+        const val USER_DATA = "userData"
+        const val TEMAS_DATA = "temasData"
+        const val PREGUNTAS_DATA = "preguntasData"
         var userData = UserData()
         var temasData = TemaData()
         var preguntasData = PreguntasData()
@@ -156,14 +156,14 @@ class HomeActivity : AppCompatActivity(),
          * @see PreguntasData
          *
          * */
-        userData.savingInterface = this as UserData.SaveAndGetLocalUserData
-        temasData.savingInterface = this as TemaData.SaveOrGetListaTemas
-        preguntasData.savingInterface = this as PreguntasData.SaveAndGetListaPreguntas
+        userData.savingInterface = this
+        temasData.savingInterface = this
+        preguntasData.savingInterface = this
 
         /**
          *
          * Se declara el color del fondo de la Activity HomeActivity
-         * @see rootHome.backgorund de forma inicial en color blanco
+         * @see rootHome .background de forma inicial en color blanco
          *
          * */
         rootHome.background = getDrawable(android.R.color.background_light)
@@ -224,22 +224,22 @@ class HomeActivity : AppCompatActivity(),
 
         /**
          *
-         * @param getConexionFromFirebase inicializa un listener para comprobar cuando hay o no hay conexión con la
+         * @see getConexionFromFirebase inicializa un listener para comprobar cuando hay o no hay conexión con la
          * base de datos
          * @sample getConexionFromFirebase
          *
-         * @param getTemasFromFirebase hace una consulta con la base de datos para descargar los temas de esta
+         * @see getTemasFromFirebase hace una consulta con la base de datos para descargar los temas de esta
          * @sample getTemasFromFirebase
          *
-         * @param getPreguntasFromFirebase hace una consulta con la base de datos para descargar las preguntas de esta
+         * @see getPreguntasFromFirebase hace una consulta con la base de datos para descargar las preguntas de esta
          * @sample getPreguntasFromFirebase
          *
-         * @param saveUsuarioToFirebase actualiza de forma inicial la información del usuario en la base de datos local
+         * @see saveUsuarioToFirebase actualiza de forma inicial la información del usuario en la base de datos local
          * con la base de datos Firebase
          * Se le pasa un parámetro de la clase [User] , que corresponde a los datos del usuario
          * @sample saveUsuarioToFirebase
          *
-         * @param setTimer inicializa una función que incorpora una cuenta atrás, esta determina cuanto hay que esperar
+         * @see setTimer inicializa una función que incorpora una cuenta atrás, esta determina cuanto hay que esperar
          * antes de declarar que no hay conexión si la base de datos no responde en el tiempo en segundos pasado a través
          * de un parámetro [Int]
          * @sample setTimer
@@ -262,7 +262,7 @@ class HomeActivity : AppCompatActivity(),
     private fun setTimer(seconds: Int){
         /**
          *
-         * @param miliseconds convierte la
+         * miliseconds convierte la
          * @property seconds en milisegundos
          *
          * La instancia de la clase
@@ -272,17 +272,17 @@ class HomeActivity : AppCompatActivity(),
          *
          * Seguidamente se comprueba si:
          *
-         * @see conectionState es [true], si la conexión ya ha sido establecida
-         * si conectionState es [true] se comprueba si la interfaz principal
+         * @see conectionState es true, si la conexión ya ha sido establecida
+         * si conectionState es true se comprueba si la interfaz principal
          * @see mainUILoaded ha sido cargada o no
          * Si no ha sido cargada se llama a la función
          * @see checkInternetAndUser con su propiedad
-         * @property withInternet con el valor [true]
+         * withInternet con el valor true
          *
-         * @see conectionState es [false], si la conexión no  ha sido establecida
-         * si conectionState es [false] se llama a la función
+         * @see conectionState es false, si la conexión no  ha sido establecida
+         * si conectionState es false se llama a la función
          * @see checkInternetAndUser con su propiedad
-         * @property withInternet con el valor [false]
+         * withInternet con el valor false
          *
          * */
         val miliseconds = (seconds * 1000).toLong()
@@ -362,7 +362,7 @@ class HomeActivity : AppCompatActivity(),
                 /**
                  *
                  * Se crea una variable
-                 * @param temasList de la clase
+                 * temasList de la clase
                  * @see TemasList en la que se irán almacenando todos los temas
                  * Se añaden a través de un loop temas de la clase
                  * @see Tema
@@ -370,12 +370,12 @@ class HomeActivity : AppCompatActivity(),
                  * Se guardan estos temas en la variable
                  * @see temasData con la función
                  * @see TemaData.addUpdateTemas pasandole como parámetro la variable
-                 * @see temasList
+                 * temasList
                  *
                  * Se guardan estos temas como parte de los datos del usuario en la variable
                  * @see userData con la función
                  * @see UserData.ActualizarTemas pasandole como parámetro la variable
-                 * @see temasList
+                 * temasList
                  *
                  * */
                 val temasList = TemasList()
@@ -417,7 +417,7 @@ class HomeActivity : AppCompatActivity(),
                 /**
                  *
                  * Se crea una variable
-                 * @param preguntasList de la clase
+                 * preguntasList de la clase
                  * @see PreguntasTotal en la que se irán almacenando todas las preguntas
                  * Se añaden a través de un loop preguntas de la clase
                  * @see PreguntasDificultad
@@ -425,7 +425,7 @@ class HomeActivity : AppCompatActivity(),
                  * Se guardan estas preguntas en la variable
                  * @see preguntasData con la función
                  * @see PreguntasData.addUpdatePreguntas pasandole como parámetro la variable
-                 * @see preguntasList
+                 * preguntasList
                  *
                  * Una vez cargados estos datos (suelen ser los de mayor volumen) se da por hecho que todos los datos
                  * de la base de datos han sido descargados.
@@ -433,8 +433,8 @@ class HomeActivity : AppCompatActivity(),
                  * @see homeScene ha sido cargada, comprobando el parámetro
                  * @see mainUILoaded
                  *
-                 * Si mainUILoaded tiene como valor [false] (no ha sido cargada) se llama a la función
-                 * @see checkInternetAndUser con el valor [true] (si hay internet) y comprueba si en la base de datos
+                 * Si mainUILoaded tiene como valor false (no ha sido cargada) se llama a la función
+                 * @see checkInternetAndUser con el valor true (si hay internet) y comprueba si en la base de datos
                  * local hay ya un usuario registrado y realiza o no una determinada tarea si hay o no conexión
                  * @sample checkInternetAndUser
                  *
@@ -491,7 +491,7 @@ class HomeActivity : AppCompatActivity(),
      * @see checkInternetAndUser comprueba básicamente si hay o no hay ya un usuario registrado en la base de datos
      * local de la app en el dispositivo. Además informa al usuario si hay o no conexión
      * Recibe como parámetro la propiedad
-     * @property withInternet que indica si hay conexión [true] o si no [false]
+     * @property withInternet que indica si hay conexión true o si no false
      *
      * */
     fun checkInternetAndUser(withInternet: Boolean){
@@ -514,11 +514,11 @@ class HomeActivity : AppCompatActivity(),
          *
          * See comprueba la propiedad
          * @property withInternet para ver si hay internet o no
-         * si no hay internet, si el valor de esta propiedad es [false] se muestra al usuario un
+         * si no hay internet, si el valor de esta propiedad es false se muestra al usuario un
          * @see Toast informandole de este estado
          *
          * Finalmente se establece la variable
-         * @see mainUILoaded como [true] es decir, se indica que la aplicación ha cargado ya sus datos o ha saltado
+         * @see mainUILoaded como true es decir, se indica que la aplicación ha cargado ya sus datos o ha saltado
          * el timeout de conexión. De todos modos indica que la pantalla home ya tiene su interfaz representada por
          * la escena
          * @see homeScene cargada
@@ -559,7 +559,7 @@ class HomeActivity : AppCompatActivity(),
          * @see R.drawable.gradient_background
          *
          * El parámetro
-         * @param transition es de la clase
+         * @see transition es de la clase
          * @see Transition he inicializa una transición con el xml
          * @see R.transition.no_transition
          * Seguidamente se define la duración de la transición con el valor 0, es decir, transición sin animación
@@ -580,7 +580,7 @@ class HomeActivity : AppCompatActivity(),
          * @see User.puntuacion
          *
          * Finalmente se evita que se muestre el título en la barra de acción llamando al método
-         * @see getSupportActionBar.setDisplayShowTitleEnabled y pasandole el valor [false]
+         * @see getSupportActionBar .setDisplayShowTitleEnabled y pasandole el valor false
          *
          * */
         rootHome.background = getDrawable(R.drawable.gradient_background)
@@ -652,30 +652,30 @@ class HomeActivity : AppCompatActivity(),
         /**
          *
          * Se comprueba si la lista de temas de la base de datos local está vacia, esta se guarda en la variable
-         * @see temasData.lista.temas de la clase
-         * @see TemasList.temas
+         * @see temasData .lista.temas de la clase
+         * @see TemasList .temas
          *
          * Si esta vacía se muestra información al usuario impidiendo iniciar una partida. Esto se realiza a través
          * de un snackBar. Este snackbar tiene una acción que permite reiniciar la aplicación para intentar resolver
          * el problema.
-         * @param snack implementa un snackBar con el mensaje de que no hay datos
+         * snack implementa un snackBar con el mensaje de que no hay datos
          * @see Snackbar
          *
          * Seguidamente se cambia el aspecto estético del snackbar, cambiandole el color de fondo y el color del
          * texto que este muestra.
          * Se cambia también el color del botón acción del mismo.
          * En este botón acción se implementa la acción asociada al parámetro
-         * @param i
+         * i
          * Esta junto a
          * @see startActivity sirven para reiniciar la aplicación
          *
          * Finalmente se muestra el snackbar a traves del metodo show()
-         * @see Snackbar.show
+         * @see Snackbar .show
          *
          *
          * Si la lista no está vacia se accede a la activy
          * @see SelectionActivity a través del parametro
-         * @param intent y el método
+         * intent y el método
          * @see startActivity
          *
          * */
@@ -757,7 +757,7 @@ class HomeActivity : AppCompatActivity(),
          * @see R.menu.menu_home en el menu de la activity
          *
          * Para ello se utiliza el metodo
-         * @see getMenuInflater.inflate al que se le pasa el layout del menu la property
+         * @see getMenuInflater .inflate al que se le pasa el layout del menu la property
          * @property menu
          *
          * */
@@ -814,7 +814,7 @@ class HomeActivity : AppCompatActivity(),
     /**
      *
      * @see saveUserData implementa el método de la interfaz
-     * @see UserData.savingInterface.saveUserData Sirve para guardar información del usuario en sharedPreferences
+     * @see UserData.savingInterface .saveUserData Sirve para guardar información del usuario en sharedPreferences
      * Recibe el parámetro
      * @property user que es de la clase
      * @see User
@@ -824,16 +824,16 @@ class HomeActivity : AppCompatActivity(),
 
         /**
          *
-         * @param prefsEditor utiliza la referencia
+         * prefsEditor utiliza la referencia
          * @see sharedPreferences y permite la edición de sharedPreferences
          *
-         * @param json utiliza la referencia
+         * json utiliza la referencia
          * @see gson de la clase
          * @see Gson para convertir los datos de
          * @property user en Json
          *
          * Seguidamente se introducen estos datos en shared preferences a través de
-         * @param prefsEditor con el identificador
+         * prefsEditor con el identificador
          * @see USER_DATA
          *
          * Finalmente se llama al método
@@ -851,7 +851,7 @@ class HomeActivity : AppCompatActivity(),
     /**
      *
      * @see updateMainPuntuacionTextView implementa el método de la interfaz
-     * @see UserData.savingInterface.updateMainPuntuacionTextView
+     * @see UserData.savingInterface .updateMainPuntuacionTextView
      * Se pasa como parámetro
      * @property puntuacion
      *
@@ -879,18 +879,18 @@ class HomeActivity : AppCompatActivity(),
          *
          * Se comprueba si sharedPreferences contiene información de usuario a través de la referencia
          * @see sharedPreferences utilizando el método
-         * @see SharedPreferences.contains con la clave
+         * @see SharedPreferences .contains con la clave
          * @see USER_DATA
          *
-         * Si esto es [true] se crea la variable
-         * @param json con la que se lee la información a través de la clave anterior
-         * @see SharedPreferences.getString con la clave
+         * Si esto es true se crea la variable
+         * json con la que se lee la información a través de la clave anterior
+         * @see SharedPreferences .getString con la clave
          * @see UserData
          *
          * Esa información se guarda en la variable que almacena los datos del usuario
-         * @see userData.user utilizando la variable
+         * @see userData .user utilizando la variable
          * @see gson con su método
-         * @see Gson.fromJson con la variable json y la clase
+         * @see Gson .fromJson con la variable json y la clase
          * @see User como parámetros
          *
          * */
@@ -903,7 +903,7 @@ class HomeActivity : AppCompatActivity(),
     /**
      *
      * @see saveListaTemas implementa el método de la interfaz
-     * @see TemaData.savingInterface.saveUserData Sirve para guardar información de los temas en sharedPreferences
+     * @see TemaData .savingInterface.saveUserData Sirve para guardar información de los temas en sharedPreferences
      * Recibe el parámetro
      * @property temas que es de la clase
      * @see TemasList
@@ -913,16 +913,16 @@ class HomeActivity : AppCompatActivity(),
 
         /**
          *
-         * @param prefsEditor utiliza la referencia
+         * prefsEditor utiliza la referencia
          * @see sharedPreferences y permite la edición de sharedPreferences
          *
-         * @param json utiliza la referencia
+         * json utiliza la referencia
          * @see gson de la clase
          * @see Gson para convertir los datos de
          * @property temas en Json
          *
          * Seguidamente se introducen estos datos en shared preferences a través de
-         * @param prefsEditor con el identificador
+         * prefsEditor con el identificador
          * @see TEMAS_DATA
          *
          * */
@@ -943,18 +943,18 @@ class HomeActivity : AppCompatActivity(),
          *
          * Se comprueba si sharedPreferences contiene información de usuario a través de la referencia
          * @see sharedPreferences utilizando el método
-         * @see SharedPreferences.contains con la clave
+         * @see SharedPreferences .contains con la clave
          * @see USER_DATA
          *
-         * Si esto es [true] se crea la variable
-         * @param json con la que se lee la información a través de la clave anterior
-         * @see SharedPreferences.getString con la clave
+         * Si esto es true se crea la variable
+         * json con la que se lee la información a través de la clave anterior
+         * @see SharedPreferences .getString con la clave
          * @see TEMAS_DATA
          *
          * Esa información se guarda en la variable que almacena los datos del usuario
-         * @see temasData.lista utilizando la variable
+         * @see temasData .lista utilizando la variable
          * @see gson con su método
-         * @see Gson.fromJson con la variable json y la clase
+         * @see Gson .fromJson con la variable json y la clase
          * @see TemasList como parámetros
          *
          * */
@@ -967,7 +967,7 @@ class HomeActivity : AppCompatActivity(),
     /**
      *
      * @see savePreguntas implementa el método de la interfaz
-     * @see PreguntasData.savingInterface.saveUserData Sirve para guardar información de las preguntas en sharedPreferences
+     * @see PreguntasData .savingInterface.saveUserData Sirve para guardar información de las preguntas en sharedPreferences
      * Recibe el parámetro
      * @property preguntas que es de la clase
      * @see PreguntasTotal
@@ -977,16 +977,16 @@ class HomeActivity : AppCompatActivity(),
 
         /**
          *
-         * @param prefsEditor utiliza la referencia
+         * prefsEditor utiliza la referencia
          * @see sharedPreferences y permite la edición de sharedPreferences
          *
-         * @param json utiliza la referencia
+         * json utiliza la referencia
          * @see gson de la clase
          * @see Gson para convertir los datos de
          * @property preguntas en Json
          *
          * Seguidamente se introducen estos datos en shared preferences a través de
-         * @param prefsEditor con el identificador
+         * prefsEditor con el identificador
          * @see PREGUNTAS_DATA
          *
          * */
@@ -1010,13 +1010,13 @@ class HomeActivity : AppCompatActivity(),
          * @see SharedPreferences.contains con la clave
          * @see USER_DATA
          *
-         * Si esto es [true] se crea la variable
-         * @param json con la que se lee la información a través de la clave anterior
+         * Si esto es true se crea la variable
+         * json con la que se lee la información a través de la clave anterior
          * @see SharedPreferences.getString con la clave
          * @see PREGUNTAS_DATA
          *
          * Esa información se guarda en la variable que almacena los datos del usuario
-         * @see preguntasData.listaPreguntasTotal utilizando la variable
+         * @see preguntasData .listaPreguntasTotal utilizando la variable
          * @see gson con su método
          * @see Gson.fromJson con la variable json y la clase
          * @see PreguntasTotal como parámetros

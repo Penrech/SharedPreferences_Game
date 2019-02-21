@@ -16,10 +16,10 @@ import kotlinx.android.synthetic.main.custom_alert_dialog.view.*
 
 class RegisterActivity : AppCompatActivity() {
 
-    var database : FirebaseDatabase? = null
-    var usersRef: DatabaseReference? = null
+    private var database : FirebaseDatabase? = null
+    private var usersRef: DatabaseReference? = null
 
-    var newUserId : String? = null
+    private var newUserId : String? = null
     var dataGet: Boolean = false
 
     override fun onCreate(savedInstanceState: Bundle?) {
@@ -46,7 +46,7 @@ class RegisterActivity : AppCompatActivity() {
         }
     }
 
-    fun validateWithFirebase(newNickname: String){
+    private fun validateWithFirebase(newNickname: String){
         setTimer(2)
 
         newUserId = usersRef?.push()?.key
@@ -56,7 +56,7 @@ class RegisterActivity : AppCompatActivity() {
         usersRef?.orderByChild("nicknameLowerCase")?.equalTo(lowerCaseNickname)?.addListenerForSingleValueEvent(object :
             ValueEventListener {
             override fun onDataChange(dataSnapshot: DataSnapshot) {
-                if (dataGet == false){
+                if (!dataGet){
                     if (dataSnapshot.childrenCount > 0){
                         registerNicknameErrorLabel.text = getString(R.string.error_nickname_already_in_use)
                         registerNicknameErrorLabel.visibility = View.VISIBLE
@@ -71,7 +71,7 @@ class RegisterActivity : AppCompatActivity() {
             }
 
             override fun onCancelled(error: DatabaseError) {
-                if (dataGet == false) {
+                if (!dataGet) {
                     Toast.makeText(this@RegisterActivity, getString(R.string.error_conexion), Toast.LENGTH_LONG).show()
 
                     dataGet = true
@@ -97,9 +97,9 @@ class RegisterActivity : AppCompatActivity() {
         customView.customDialogSecundaryButton.text = getString(R.string.dialog_cancel_button_text)
 
         customView.customDialogPrimaryButton.setOnClickListener {
-            moveTaskToBack(true);
-            android.os.Process.killProcess(android.os.Process.myPid());
-            System.exit(1);
+            moveTaskToBack(true)
+            android.os.Process.killProcess(android.os.Process.myPid())
+            System.exit(1)
 
             dialogLista.dismiss()
         }
@@ -115,7 +115,7 @@ class RegisterActivity : AppCompatActivity() {
         dialogLista.show()
     }
 
-    fun setTimer(seconds: Int){
+    private fun setTimer(seconds: Int){
         dataGet = false
 
         val miliseconds = (seconds * 1000).toLong()

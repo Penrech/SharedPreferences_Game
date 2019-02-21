@@ -4,7 +4,6 @@ import android.text.Editable
 import android.widget.TextView
 import android.text.TextWatcher
 
-
 abstract class NicknameValidator(private val textView: TextView) : TextWatcher {
 
     abstract fun validate(textView: TextView, text: String)

@@ -31,7 +31,7 @@ class PreguntasTema(
         /**
          *
          * Se define una variable
-         * @param randomQuestions que es una copia de la lista
+         * randomQuestions que es una copia de la lista
          * @see preguntas
          *
          * Se utiliza el método

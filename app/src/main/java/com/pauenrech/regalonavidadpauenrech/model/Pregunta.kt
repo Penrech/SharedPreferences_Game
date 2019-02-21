@@ -50,14 +50,14 @@ class Pregunta(
         /**
          *
          * Para escoger la respuesta aleatoria se crea la variable
-         * @param random que utiliza el método
+         * random que utiliza el método
          * @see Random.nextInt con el parámetro [2] para obtener un número aleatorio del 0 al 1
          *
          * Seguidamente se utiliza un selector when con
-         * @param random como parámetro
+         * random como parámetro
          *
          * Si
-         * @param random es [0]
+         * random es [0]
          * La respuesta
          * @see topAnswer , la que se muestra al usuario, es la
          * @see respuesta_correcta
@@ -66,7 +66,7 @@ class Pregunta(
          * @see respuesta_incorrecta
          *
          * si
-         * @param random es [1]
+         * random es [1]
          * La respuesta
          * @see topAnswer , la que se muestra al usuario, es la
          * @see respuesta_incorrecta

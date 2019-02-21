@@ -13,13 +13,13 @@ import kotlinx.android.synthetic.main.fragment_theme_selection.*
 class SelectionActivity : AppCompatActivity(), ThemeSelectionFragment.clickListener {
 
     private lateinit var mPager: ViewPager
-    var pagerAdapter: selectionViewPager? = null
+    private var pagerAdapter: selectionViewPager? = null
 
-    val userDataReference = HomeActivity.userData
-    val temasDataReference = HomeActivity.temasData.lista.temas
+    private val userDataReference = HomeActivity.userData
+    private val temasDataReference = HomeActivity.temasData.lista.temas
 
-    var fragmentsList: MutableList<ThemeSelectionFragment> = mutableListOf()
-    var themeInFragmentId: MutableList<String> = mutableListOf()
+    private var fragmentsList: MutableList<ThemeSelectionFragment> = mutableListOf()
+    private var themeInFragmentId: MutableList<String> = mutableListOf()
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
@@ -37,7 +37,7 @@ class SelectionActivity : AppCompatActivity(), ThemeSelectionFragment.clickListe
         fillPageViewer()
     }
 
-    fun fillPageViewer(){
+    private fun fillPageViewer(){
         userDataReference.user.temas[userDataReference.user.dificultad].forEach {userTheme->
             val theme = temasDataReference.filter { it.id == userTheme.id}[0]
 
@@ -49,7 +49,7 @@ class SelectionActivity : AppCompatActivity(), ThemeSelectionFragment.clickListe
         mPager.adapter = pagerAdapter
     }
 
-    fun refreshPageViewer(temaId: String){
+    private fun refreshPageViewer(temaId: String){
         val index = themeInFragmentId.indexOf(temaId)
         val score = userDataReference.user.getTemaScore(temaId)
 

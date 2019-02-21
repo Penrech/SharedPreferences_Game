@@ -8,7 +8,7 @@
         android:background="@android:color/transparent">
 
     <TextView
-            android:text="Nombre Tema"
+            android:text="@string/default_theme_name_placeholder"
             android:layout_width="0dp"
             android:layout_height="wrap_content"
             android:id="@+id/profileSpecificTheme"

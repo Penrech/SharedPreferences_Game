@@ -35,7 +35,7 @@
                     android:layout_height="match_parent">
 
                 <TextView
-                        android:text="Nombre categoria"
+                        android:text="@string/default_category_name_placeholder"
                         android:layout_width="0dp"
                         android:layout_height="wrap_content"
                         android:id="@+id/selectionCardTitle"
