@@ -28,8 +28,9 @@
 </p>
 
 <h1>Demo in Google Play</h1>
-<p><a href='https://play.google.com/store/apps/details?id=com.pauenrech.ejerciciocontentprovider'><img id='imgDetalle' src='detalle-04.png'/></a></p>
-<a href='https://play.google.com/store/apps/details?id=com.pauenrech.ejerciciocontentprovider&pcampaignid=MKT-Other-global-all-co-prtnr-py-PartBadge-Mar2515-1'><img alt='Get it on Google Play' src='https://play.google.com/intl/en_us/badges/images/generic/en_badge_web_generic.png'/></a>
+<p><a href='https://play.google.com/store/apps/details?id=com.pauenrech.regalonavidadpauenrech'><img id='imgDetalle' src='detalle-07.png'/></a></p>
+<a href='https://play.google.com/store/apps/details?id=com.pauenrech.regalonavidadpauenrech&pcampaignid=MKT-Other-global-all-co-prtnr-py-PartBadge-Mar2515-1'><img width= '33%' alt='Get it on Google Play' src='https://play.google.com/intl/en_us/badges/images/generic/en_badge_web_generic.png'/></a>
+
 
 <h1>Video Demo *</h1>
 <p style>*A higher quality and longer video opens on YouTube when clicked</p>
